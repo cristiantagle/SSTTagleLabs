@@ -54,12 +54,6 @@ export function Sidebar() {
                     >
                         <item.icon size={20} className="transition-transform group-hover:scale-110" />
                         <span className="font-medium text-sm">{item.label}</span>
-
-                        {/* Active Indicator Strip */}
-                        <NavLink to={item.path} className={({ isActive }) =>
-                            isActive ? "absolute right-0 w-1 h-8 bg-cyan-500 rounded-l-full opacity-100" : "hidden"
-                        }>
-                        </NavLink>
                     </NavLink>
                 ))}
             </nav>

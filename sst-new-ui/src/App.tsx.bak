@@ -1,0 +1,28 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { MainLayout } from './layouts/MainLayout';
+import { Dashboard } from './pages/Dashboard';
+import { EmpresasPage } from './pages/Empresas';
+import { PlaceholderPage } from './pages/Placeholder';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="empresas" element={<EmpresasPage />} />
+          <Route path="trabajadores" element={<PlaceholderPage />} />
+          <Route path="documentos" element={<PlaceholderPage />} />
+          <Route path="matriz-riesgos" element={<PlaceholderPage />} />
+          <Route path="siniestros" element={<PlaceholderPage />} />
+          <Route path="auditoria" element={<PlaceholderPage />} />
+          <Route path="configuracion" element={<PlaceholderPage />} />
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
