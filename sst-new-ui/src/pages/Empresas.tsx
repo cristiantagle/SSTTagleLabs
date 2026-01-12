@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Empresa } from '../types';
 import { Plus, Search, Building2, MapPin, Users, MoreVertical } from 'lucide-react';
+
+interface Empresa {
+    id: number;
+    rut: string;
+    razonSocial: string;
+    giro: string;
+    numeroTrabajadores: number;
+    direccion?: string;
+    logoPath?: string;
+}
 
 export function EmpresasPage() {
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
