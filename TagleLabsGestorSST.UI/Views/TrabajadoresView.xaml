@@ -1,0 +1,367 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.TrabajadoresView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:entities="clr-namespace:TagleLabsGestorSST.Data.Entities;assembly=TagleLabsGestorSST.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="SensibilidadEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="entities:SensibilidadEspecial"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
+    <Grid Background="#F1F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER GRADIENTE -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Grid.RowSpan="2"/>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1" Margin="30,-80,30,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- COLUMNA IZQUIERDA: LISTA -->
+            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                <TextBlock Text="Trabajadores" Style="{StaticResource EstiloTituloPagina}" Margin="0,0,0,5"/>
+                <TextBlock Text="Gestión de personal y contratos" Style="{StaticResource EstiloSubtituloPagina}" Margin="0,0,0,20"/>
+
+                <!-- Botón Nuevo (Fuera de la tarjeta para más destaque) -->
+                <Button Command="{Binding NuevoTrabajadorCommand}" Style="{StaticResource MaterialDesignFlatButton}" 
+                        Height="50" Background="White" Margin="0,0,0,15"
+                        HorizontalContentAlignment="Left" Padding="15,0"
+                        materialDesign:ElevationAssist.Elevation="Dp1">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="12"/>
+                        </Style>
+                    </Button.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="#ECFDF5" CornerRadius="20" Width="32" Height="32" Margin="0,0,15,0">
+                            <materialDesign:PackIcon Kind="Plus" Foreground="#10B981" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Registrar Nuevo Trabajador" FontWeight="SemiBold" Foreground="#10B981" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Lista Cards -->
+                <ListBox ItemsSource="{Binding Trabajadores}" SelectedItem="{Binding TrabajadorSeleccionado}" 
+                         ItemContainerStyle="{StaticResource EstiloCardTrabajador}" Background="Transparent" BorderThickness="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" Padding="0,0,5,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Avatar -->
+                                <Border Width="45" Height="45" CornerRadius="25" Background="#F1F5F9" Margin="0,0,15,0">
+                                    <TextBlock Text="{Binding NombreCompleto, Converter={StaticResource NameInitialConverter}}" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                               FontWeight="Bold" Foreground="#64748B" FontSize="16"/>
+                                </Border>
+                                
+                                <!-- Info -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding NombreCompleto}" FontWeight="SemiBold" Foreground="#0F172A" FontSize="14"/>
+                                    <TextBlock Text="{Binding Cargo}" FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                
+                                <!-- Status/Arrow -->
+                                <materialDesign:PackIcon Grid.Column="2" Kind="ChevronRight" Foreground="#CBD5E1" VerticalAlignment="Center" Style="{StaticResource PackIconMedium}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <!-- COLUMNA DERECHA: DETALLE -->
+            <Grid Grid.Column="1">
+                <!-- Mensaje Vacío -->
+                <Border Style="{StaticResource EstiloCardContenido}" VerticalAlignment="Center" 
+                        Visibility="{Binding TrabajadorSeleccionado, Converter={StaticResource NullToCollapsedConverter}}">
+                    <StackPanel HorizontalAlignment="Center" Margin="40">
+                        <Border Background="#F1F5F9" CornerRadius="50" Width="100" Height="100" Margin="0,0,0,20">
+                            <materialDesign:PackIcon Kind="AccountConvert" Style="{StaticResource PackIconLarge}" Foreground="#CBD5E1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Seleccione un trabajador" FontSize="20" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Para ver su ficha completa y editar sus datos" FontSize="14" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Formulario -->
+                <Border Style="{StaticResource EstiloCardContenido}" Visibility="{Binding TrabajadorSeleccionado, Converter={StaticResource NullToVisibilityConverter}}">
+                    <Border.Triggers>
+                        <EventTrigger RoutedEvent="Border.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4"/>
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,20,0,0" To="0" Duration="0:0:0.4" DecelerationRatio="0.9"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Border.Triggers>
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Header Ficha (Always Visible) -->
+                        <Grid Grid.Row="0" Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Border Width="60" Height="60" CornerRadius="30" Background="#EFF6FF" Margin="0,0,20,0">
+                                <TextBlock Text="{Binding TrabajadorSeleccionado.NombreCompleto, Converter={StaticResource NameInitialConverter}}" 
+                                           VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                           FontWeight="Bold" Foreground="#3B82F6" FontSize="20"/>
+                            </Border>
+                            
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding TrabajadorSeleccionado.NombreCompleto}" FontSize="22" FontWeight="Bold" Foreground="#0F172A"/>
+                                <TextBlock Text="Ficha Personal" FontSize="14" Foreground="#64748B"/>
+                            </StackPanel>
+                            
+                            <Button Grid.Column="2" Command="{Binding EliminarTrabajadorCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" 
+                                    Foreground="#EF4444" ToolTip="Eliminar Trabajador" VerticalAlignment="Top">
+                                <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource PackIconMedium}"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Tabs -->
+                        <TabControl Grid.Row="1" materialDesign:ColorZoneAssist.Mode="Standard" Background="Transparent">
+                            
+                            <!-- TAB 1: FICHA PERSONAL -->
+                            <TabItem Header="FICHA PERSONAL" Padding="20,10">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,20,10,0">
+                                    <StackPanel>
+                                        <!-- Datos Personales -->
+                                        <TextBlock Text="Información Personal" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,15"/>
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!-- Campo RUT con validación visual -->
+                                            <StackPanel>
+                                                <Grid>
+                                                    <TextBox x:Name="TxtRutTrabajador" 
+                                                             Text="{Binding TrabajadorSeleccionado.Rut, UpdateSourceTrigger=PropertyChanged}" 
+                                                             materialDesign:HintAssist.Hint="RUT (ej: 12.345.678-9)" 
+                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                             TextChanged="TxtRutTrabajador_TextChanged"/>
+                                                    <materialDesign:PackIcon x:Name="IconRutTrabajadorValid" Kind="CheckCircle" 
+                                                                              Foreground="#10B981" Width="22" Height="22"
+                                                                              HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                                              Margin="0,0,10,0" Visibility="Collapsed"/>
+                                                    <materialDesign:PackIcon x:Name="IconRutTrabajadorInvalid" Kind="CloseCircle" 
+                                                                              Foreground="#EF4444" Width="22" Height="22"
+                                                                              HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                                              Margin="0,0,10,0" Visibility="Collapsed"/>
+                                                </Grid>
+                                                <TextBlock x:Name="TxtRutTrabajadorError" FontSize="11" Foreground="#EF4444" Margin="5,2,0,0" Visibility="Collapsed"/>
+                                            </StackPanel>
+                                            <DatePicker Grid.Column="2" SelectedDate="{Binding TrabajadorSeleccionado.FechaNacimiento}" materialDesign:HintAssist.Hint="Fecha de Nacimiento" Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                        </Grid>
+
+                                        <TextBox Text="{Binding TrabajadorSeleccionado.NombreCompleto}" materialDesign:HintAssist.Hint="Nombre Completo" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,20"/>
+
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding TrabajadorSeleccionado.EstadoCivil}" materialDesign:HintAssist.Hint="Estado Civil" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                            <TextBox Grid.Column="2" Text="{Binding TrabajadorSeleccionado.Comuna}" materialDesign:HintAssist.Hint="Comuna" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                        </Grid>
+
+                                        <TextBox Text="{Binding TrabajadorSeleccionado.Direccion}" materialDesign:HintAssist.Hint="Dirección Particular" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,20"/>
+
+                                        <!-- Foto Placeholder -->
+                                        <Button Style="{StaticResource MaterialDesignOutlinedButton}" Margin="0,0,0,20" HorizontalAlignment="Left"
+                                                ToolTip="Funcionalidad de carga de foto pendiente">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="CameraPlus" Margin="0,0,10,0"/>
+                                                <TextBlock Text="Cargar Foto (Pendiente)"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        <!-- Datos Laborales -->
+                                        <TextBlock Text="Información Laboral" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,10,0,15"/>
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding TrabajadorSeleccionado.Cargo}" materialDesign:HintAssist.Hint="Cargo / Función" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                            <DatePicker Grid.Column="2" SelectedDate="{Binding TrabajadorSeleccionado.FechaIngreso}" materialDesign:HintAssist.Hint="Fecha de Ingreso" Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                                        </Grid>
+
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding TrabajadorSeleccionado.AFP}" materialDesign:HintAssist.Hint="AFP" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                            <TextBox Grid.Column="2" Text="{Binding TrabajadorSeleccionado.SistemaSalud}" materialDesign:HintAssist.Hint="Sistema de Salud (Fonasa/Isapre)" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                                        </Grid>
+
+                                        <ComboBox ItemsSource="{Binding CentrosTrabajo}" 
+                                                  SelectedItem="{Binding TrabajadorSeleccionado.CentroTrabajo}" 
+                                                  materialDesign:HintAssist.Hint="Centro de Trabajo Asignado"
+                                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding Empresa.RazonSocial, TargetNullValue='Sin Empresa', FallbackValue='Sin Empresa'}" FontWeight="Bold" FontSize="12"/>
+                                                        <TextBlock Text="{Binding Nombre}" FontSize="10" Foreground="Gray"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource SensibilidadEnum}}"
+                                                  SelectedItem="{Binding TrabajadorSeleccionado.Sensibilidad}"
+                                                  materialDesign:HintAssist.Hint="Sensibilidad Especial (Art. 7 DS44)"
+                                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20" />
+
+                                        <CheckBox IsChecked="{Binding TrabajadorSeleccionado.EsContratista}" Content="Es Contratista / Externo" Margin="0,10,0,30" />
+
+                                        <!-- Protocolos -->
+                                        <TextBlock Text="Vigilancia de Salud (Protocolos MINSAL)" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                                        <Border Background="#F1F5F9" CornerRadius="8" Padding="15" Margin="0,0,0,30" BorderThickness="1" BorderBrush="#E2E8F0">
+                                            <ItemsControl ItemsSource="{Binding ProtocolosList}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox IsChecked="{Binding IsChecked}" Margin="0,5">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,5,0"/>
+                                                                <TextBlock Text="{Binding Description}" Foreground="#64748B" FontSize="12"/>
+                                                            </StackPanel>
+                                                        </CheckBox>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Border>
+
+                                        <Button Command="{Binding GuardarTrabajadorCommand}" Content="GUARDAR FICHA" Height="50" 
+                                                Background="#0F172A" BorderBrush="#0F172A" Foreground="White" FontSize="14" FontWeight="Bold"
+                                                materialDesign:ButtonAssist.CornerRadius="8"
+                                                materialDesign:ElevationAssist.Elevation="Dp2"/>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </TabItem>
+
+                            <!-- TAB 2: VACACIONES -->
+                            <TabItem Header="VACACIONES" Padding="20,10">
+                                <Grid Margin="0,20,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/> <!-- Cards -->
+                                        <RowDefinition Height="Auto"/> <!-- Form -->
+                                        <RowDefinition Height="*"/>    <!-- History -->
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Balances -->
+                                    <Grid Grid.Row="0" Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Card Ganados -->
+                                        <Border Background="#EFF6FF" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                                            <StackPanel>
+                                                <TextBlock Text="Días Ganados" Foreground="#64748B" FontSize="12"/>
+                                                <TextBlock Text="{Binding DiasGanados, StringFormat=N2}" FontWeight="Bold" FontSize="24" Foreground="#3B82F6"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <!-- Card Usados -->
+                                        <Border Grid.Column="1" Background="#FEF2F2" CornerRadius="8" Padding="15" Margin="5,0,5,0">
+                                            <StackPanel>
+                                                <TextBlock Text="Días Usados" Foreground="#64748B" FontSize="12"/>
+                                                <TextBlock Text="{Binding DiasUsados, StringFormat=N2}" FontWeight="Bold" FontSize="24" Foreground="#EF4444"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <!-- Card Saldo -->
+                                        <Border Grid.Column="2" Background="#ECFDF5" CornerRadius="8" Padding="15" Margin="10,0,0,0">
+                                            <StackPanel>
+                                                <TextBlock Text="Saldo Disponible" Foreground="#64748B" FontSize="12"/>
+                                                <TextBlock Text="{Binding SaldoVacaciones, StringFormat=N2}" FontWeight="Bold" FontSize="24" Foreground="#10B981"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Nueva Solicitud -->
+                                    <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,20" BorderThickness="1" BorderBrush="#E2E8F0">
+                                        <StackPanel>
+                                            <TextBlock Text="Registrar Solicitud" FontWeight="Bold" Margin="0,0,0,10" Foreground="#0F172A"/>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <DatePicker SelectedDate="{Binding NuevaSolicitud.FechaInicio}" materialDesign:HintAssist.Hint="Desde" Margin="0,0,10,0" Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
+                                                <DatePicker Grid.Column="1" SelectedDate="{Binding NuevaSolicitud.FechaFin}" materialDesign:HintAssist.Hint="Hasta" Margin="0,0,10,0" Style="{StaticResource MaterialDesignOutlinedDatePicker}"/>
+                                                <TextBox Grid.Column="2" Text="{Binding NuevaSolicitud.DiasHabiles}" materialDesign:HintAssist.Hint="Días Hábiles" Margin="0,0,10,0" Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                                <Button Grid.Column="3" Command="{Binding RegistrarSolicitudCommand}" Content="REGISTRAR" Style="{StaticResource MaterialDesignFlatButton}" Height="50"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Historial -->
+                                    <DataGrid Grid.Row="2" ItemsSource="{Binding HistorialVacaciones}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                                              materialDesign:DataGridAssist.CellPadding="13 8 8 8" ColumnHeaderHeight="45">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Fecha Solicitud" Binding="{Binding FechaSolicitud, StringFormat=dd/MM/yyyy}"/>
+                                            <DataGridTextColumn Header="Desde" Binding="{Binding FechaInicio, StringFormat=dd/MM/yyyy}"/>
+                                            <DataGridTextColumn Header="Hasta" Binding="{Binding FechaFin, StringFormat=dd/MM/yyyy}"/>
+                                            <DataGridTextColumn Header="Días" Binding="{Binding DiasHabiles}"/>
+                                            <DataGridTextColumn Header="Estado" Binding="{Binding Estado}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </TabItem>
+
+                            <!-- TAB 3: CARPETA DIGITAL -->
+                            <TabItem Header="CARPETA DIGITAL" Padding="20,10">
+                                <Grid Margin="0,20,0,0">
+                                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <materialDesign:PackIcon Kind="FolderUpload" Style="{StaticResource PackIconLarge}" Foreground="#CBD5E1" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Carpeta Digital" FontSize="18" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                                        <TextBlock Text="Próximamente: Subida y gestión de documentos" FontSize="14" Foreground="#64748B" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </TabItem>
+                            
+                        </TabControl>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

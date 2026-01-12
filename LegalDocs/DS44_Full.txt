@@ -1,0 +1,62 @@
+DECRETO SUPREMO N° 44
+APRUEBA REGLAMENTO SOBRE GESTIÓN PREVENTIVA DE LOS RIESGOS LABORALES
+MINISTERIO DEL TRABAJO Y PREVISIÓN SOCIAL
+Vigente desde: 1 de febrero de 2025
+
+VISTO: Lo dispuesto en los artículos 32 N° 6 y 35 de la Constitución Política de la República; en el Código del Trabajo; en la ley N° 16.744; y en la resolución N° 7, de 2019, de la Contraloría General de la República.
+
+DECRETO:
+
+TÍTULO I
+DISPOSICIONES GENERALES
+
+Artículo 1°.- El presente reglamento establece las normas para la gestión preventiva de los riesgos laborales, con el objeto de promover un entorno de trabajo seguro y saludable, conforme a los principios de la Política Nacional de Seguridad y Salud en el Trabajo.
+
+Artículo 2°.- Para los efectos de este reglamento se entenderá por:
+a) Gestión de Riesgos: Proceso sistemático de identificación de peligros, evaluación y control de los riesgos asociados a las actividades laborales.
+b) Matriz de Identificación de Peligros y Evaluación de Riesgos (MIPER): Herramienta que permite identificar los peligros, evaluar los riesgos y determinar las medidas de control.
+c) Entidad Empleadora: Toda persona natural o jurídica que emplea a uno o más trabajadores.
+d) Información de Riesgos Laborales (IRL): Documento que informa a cada trabajador sobre los riesgos específicos de su puesto de trabajo, basado en la MIPER.
+
+TÍTULO II
+DEL SISTEMA DE GESTIÓN DE SEGURIDAD Y SALUD EN EL TRABAJO (SG-SST)
+
+Artículo 3°.- Toda entidad empleadora deberá implementar un Sistema de Gestión de Seguridad y Salud en el Trabajo, el cual deberá contener, al menos, los siguientes elementos:
+1. Política de Seguridad y Salud en el Trabajo.
+2. Organización (roles y responsabilidades).
+3. Planificación (MIPER y Programa de Trabajo).
+4. Evaluación (Auditorías y revisiones).
+5. Acción en pro de mejoras (Acciones correctivas y preventivas).
+
+Artículo 4°.- La Política de SST deberá ser específica para la entidad, firmada por la máxima autoridad, difundida a todos los trabajadores y revisada periódicamente.
+
+TÍTULO III
+DE LA IDENTIFICACIÓN DE PELIGROS Y EVALUACIÓN DE RIESGOS
+
+Artículo 8°.- La entidad empleadora deberá elaborar y mantener actualizada una Matriz de Identificación de Peligros y Evaluación de Riesgos (MIPER). Esta matriz deberá:
+a) Abarcar todas las actividades, rutinarias y no rutinarias.
+b) Considerar a todos los trabajadores, contratistas y visitantes.
+c) Ser revisada al menos una vez al año o cuando ocurran cambios en los procesos o accidentes graves.
+
+Artículo 9°.- La evaluación de riesgos deberá considerar la probabilidad de ocurrencia y la gravedad de las consecuencias, utilizando metodologías reconocidas.
+
+TÍTULO IV
+DE LA INFORMACIÓN DE RIESGOS LABORALES (IRL)
+
+Artículo 15°.- La entidad empleadora deberá informar a cada trabajador sobre los riesgos laborales específicos de su puesto de trabajo mediante el documento denominado Información de Riesgos Laborales (IRL). Este documento:
+a) Deberá basarse estrictamente en los resultados de la MIPER.
+b) Será específico para cada puesto de trabajo.
+c) Contendrá los peligros identificados, riesgos evaluados, medidas preventivas y los métodos de trabajo correctos.
+d) Deberá ser entregado al trabajador al momento de su contratación y actualizarse cuando cambien las condiciones de trabajo.
+e) El trabajador deberá firmar constancia de haber recibido y comprendido la información.
+
+NOTA: Este documento reemplaza la antigua "Obligación de Informar" (ODI) del derogado DS 40.
+
+TÍTULO V
+DE LOS COMITÉS PARITARIOS DE HIGIENE Y SEGURIDAD
+
+Artículo 20°.- Los Comités Paritarios de Higiene y Seguridad (CPHS) tendrán un rol activo en la vigilancia del cumplimiento del SG-SST. Sus acuerdos son obligatorios para la empresa y los trabajadores.
+
+DISPOSICIONES TRANSITORIAS
+Artículo 1° Transitorio.- El presente reglamento entrará en vigencia el 1 de febrero de 2025.
+Artículo 2° Transitorio.- Derógase el Decreto Supremo N° 40, de 1969, del Ministerio del Trabajo y Previsión Social, a contar de la fecha de entrada en vigencia del presente reglamento.

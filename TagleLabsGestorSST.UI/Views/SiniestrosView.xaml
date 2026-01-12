@@ -1,0 +1,184 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.SiniestrosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:entities="clr-namespace:TagleLabsGestorSST.Data.Entities;assembly=TagleLabsGestorSST.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="TipoSiniestroEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="entities:TipoSiniestro"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
+    <Grid Background="#F1F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER GRADIENTE -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Grid.RowSpan="2"/>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1" Margin="30,-80,30,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- COLUMNA IZQUIERDA: LISTA -->
+            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                <TextBlock Text="Gestión de Siniestros" Style="{StaticResource EstiloTituloPagina}" Margin="0,0,0,5"/>
+                <TextBlock Text="Registro y seguimiento de accidentes" Style="{StaticResource EstiloSubtituloPagina}" Margin="0,0,0,20"/>
+
+                <!-- Filtro Empresa -->
+                <Border Background="White" CornerRadius="16" Padding="20" Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#64748B" BlurRadius="20" ShadowDepth="5" Opacity="0.1"/>
+                    </Border.Effect>
+                    <ComboBox ItemsSource="{Binding Empresas}" SelectedItem="{Binding EmpresaSeleccionada}" DisplayMemberPath="RazonSocial" 
+                              materialDesign:HintAssist.Hint="Filtrar por Empresa" Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                </Border>
+
+                <Border Style="{StaticResource EstiloCardContenido}" Padding="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Botón Nuevo -->
+                        <Button Command="{Binding NuevoIncidenteCommand}" Style="{StaticResource MaterialDesignFlatButton}" 
+                                Height="60" Background="Transparent" BorderThickness="0,0,0,1" BorderBrush="#F1F5F9"
+                                HorizontalContentAlignment="Left" Padding="20,0">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#FEF2F2" CornerRadius="20" Width="32" Height="32" Margin="0,0,15,0">
+                                    <materialDesign:PackIcon Kind="MedicalBag" Foreground="#EF4444" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Registrar Evento" FontWeight="SemiBold" Foreground="#EF4444" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Lista DataGrid -->
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding Incidentes}" SelectedItem="{Binding IncidenteSeleccionado}" 
+                                  AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                                  Background="Transparent" BorderThickness="0" MaxHeight="500"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#64748B"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="Padding" Value="15,10"/>
+                                    <Setter Property="Background" Value="White"/>
+                                </Style>
+                                <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                    <Setter Property="Padding" Value="15,10"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="FECHA" Binding="{Binding Fecha, StringFormat=d}" FontWeight="Bold" Foreground="#0F172A"/>
+                                <DataGridTextColumn Header="TIPO" Binding="{Binding Tipo}" Width="100" Foreground="#64748B"/>
+                                <DataGridTextColumn Header="TRABAJADOR" Binding="{Binding Trabajador.NombreCompleto}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <!-- COLUMNA DERECHA: DETALLE -->
+            <Grid Grid.Column="1">
+                <!-- Mensaje Vacío -->
+                <Border Style="{StaticResource EstiloCardContenido}" VerticalAlignment="Center" 
+                        Visibility="{Binding IncidenteSeleccionado, Converter={StaticResource NullToCollapsedConverter}}">
+                    <StackPanel HorizontalAlignment="Center" Margin="40">
+                        <materialDesign:PackIcon Kind="ClipboardTextClockOutline" Style="{StaticResource PackIconLarge}" Foreground="#CBD5E1" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="Seleccione un evento" FontSize="20" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Para ver el detalle y medidas" FontSize="14" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Formulario -->
+                <Border Style="{StaticResource EstiloCardContenido}" Visibility="{Binding IncidenteSeleccionado, Converter={StaticResource NullToVisibilityConverter}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,30">
+                                <StackPanel>
+                                    <TextBlock Text="Detalle del Siniestro" FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Investigación y Medidas" FontSize="14" Foreground="#64748B"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                    <Button Command="{Binding EliminarIncidenteCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" Foreground="#EF4444" ToolTip="Eliminar">
+                                            <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource PackIconMedium}"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource TipoSiniestroEnum}}"
+                                          SelectedItem="{Binding IncidenteSeleccionado.Tipo}"
+                                          materialDesign:HintAssist.Hint="Tipo de Evento"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                                <DatePicker Grid.Column="2" SelectedDate="{Binding IncidenteSeleccionado.Fecha}" 
+                                            materialDesign:HintAssist.Hint="Fecha del Suceso" 
+                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                            </Grid>
+
+                            <ComboBox ItemsSource="{Binding CentrosTrabajo}" 
+                                      SelectedItem="{Binding IncidenteSeleccionado.CentroTrabajo}" 
+                                      DisplayMemberPath="Nombre"
+                                      materialDesign:HintAssist.Hint="Centro de Trabajo"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20" />
+
+                            <ComboBox ItemsSource="{Binding Trabajadores}" 
+                                      SelectedItem="{Binding IncidenteSeleccionado.Trabajador}" 
+                                      DisplayMemberPath="NombreCompleto"
+                                      materialDesign:HintAssist.Hint="Trabajador Afectado"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20" />
+
+                            <TextBlock Text="Descripción y Causas" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,10,0,10"/>
+                            
+                            <TextBox Text="{Binding IncidenteSeleccionado.Descripcion}" 
+                                     materialDesign:HintAssist.Hint="Relato de los hechos" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     TextWrapping="Wrap" Height="80" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,20" />
+
+                            <TextBox Text="{Binding IncidenteSeleccionado.Causas}" 
+                                     materialDesign:HintAssist.Hint="Análisis de Causas (Árbol de Causas / 5 Porqués)" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     TextWrapping="Wrap" Height="60" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,20" />
+
+                            <TextBlock Text="Medidas de Control" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,10,0,10"/>
+
+                            <TextBox Text="{Binding IncidenteSeleccionado.MedidasCorrectivas}" 
+                                     materialDesign:HintAssist.Hint="Acciones Correctivas y Preventivas" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     TextWrapping="Wrap" Height="60" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15" />
+
+                            <CheckBox IsChecked="{Binding IncidenteSeleccionado.MedidasImplementadas}" Content="Medidas Completamente Implementadas" Margin="0,0,0,30" />
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Command="{Binding CancelarEdicionCommand}" Content="CANCELAR" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,10,0" />
+                                <Button Command="{Binding GuardarIncidenteCommand}" Content="GUARDAR REGISTRO" Height="50" 
+                                        Background="#0F172A" BorderBrush="#0F172A" Foreground="White" FontSize="14" FontWeight="Bold"
+                                        materialDesign:ButtonAssist.CornerRadius="8" Width="200"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

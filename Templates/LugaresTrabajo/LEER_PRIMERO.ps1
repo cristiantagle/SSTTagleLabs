@@ -1,0 +1,33 @@
+# Script para crear plantillas de ejemplo para el sistema de Lugares de Trabajo
+# Ejecutar desde la raíz del proyecto: dotnet run --project GenerarPlantillasEjemplo.csproj
+
+# Alternativa manual: Crear las plantillas manualmente siguiendo estas instrucciones
+
+Write-Host "============================================"
+Write-Host "PLANTILLAS DE EJEMPLO - LUGARES DE TRABAJO"
+Write-Host "============================================"
+Write-Host ""
+Write-Host "Como alternativa al script, puedes crear las plantillas manualmente:"
+Write-Host ""
+Write-Host "1. PLANTILLA WORD (ODI Individual):"
+Write-Host "   - Crea un documento Word (.docx)"
+Write-Host "   - Usa estos placeholders (copiar tal cual con las llaves):"
+Write-Host ""
+Write-Host "   {{NOMBRE_TRABAJADOR}}"
+Write-Host "   {{RUT_TRABAJADOR}}"
+Write-Host "   {{CARGO}}"
+Write-Host "   {{FECHA_ACTUAL}}"
+Write-Host "   {{LUGAR_TRABAJO}}"
+Write-Host "   {{EMPRESA}}"
+Write-Host ""
+Write-Host "2. PLANTILLA EXCEL (Charla Masiva):"
+Write-Host "   - Crea una hoja Excel (.xlsx)"
+Write-Host "   - En celda A1: {{LUGAR_TRABAJO}}"
+Write-Host "   - En celda A2: {{TEMA_CHARLA}}"
+Write-Host "   - En celda A3: {{FECHA_CHARLA}}"
+Write-Host "   - En celda A4: {{EXPOSITOR}}"
+Write-Host "   - En celda A5: {{DURACION}}"
+Write-Host "   - Tabla de asistentes:"
+Write-Host "     {{LISTA_ASISTENTES}} (esto se reemplaza por la tabla completa)"
+Write-Host ""
+Write-Host "============================================"

@@ -1,0 +1,257 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.DocumentosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <Grid Background="#F1F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER GRADIENTE -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Grid.RowSpan="2"/>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1" Margin="30,-80,30,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- COLUMNA IZQUIERDA: GENERADOR -->
+            <ScrollViewer Grid.Column="0" Margin="0,0,20,0" 
+                          VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+                    <TextBlock Text="Generador Documental" Style="{StaticResource EstiloTituloPagina}" Margin="0,0,0,5"/>
+                    <TextBlock Text="Creación automática de documentos legales" Style="{StaticResource EstiloSubtituloPagina}" Margin="0,0,0,20"/>
+
+                    <Border Style="{StaticResource EstiloCardContenido}">
+                        <StackPanel>
+                            <TextBlock Text="Nueva Solicitud" FontSize="18" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,20"/>
+
+                        <TextBlock Text="1. Configuración Base" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                        <ComboBox ItemsSource="{Binding Empresas}" SelectedItem="{Binding EmpresaSeleccionada}" DisplayMemberPath="RazonSocial" 
+                                  materialDesign:HintAssist.Hint="Seleccionar Empresa" Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20" />
+
+                        <TextBlock Text="2. Tipo de Documento" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                        <ComboBox ItemsSource="{Binding Plantillas}" 
+                                  SelectedItem="{Binding PlantillaSeleccionada}" 
+                                  DisplayMemberPath="Nombre"
+                                  materialDesign:HintAssist.Hint="Seleccionar Plantilla"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,5" />
+                        
+                        <TextBlock Text="{Binding PlantillaSeleccionada.Descripcion}" TextWrapping="Wrap" FontSize="12" Foreground="#64748B" Margin="0,0,0,20" />
+
+                        <TextBlock Text="3. Destinatario (Opcional)" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                        <ComboBox ItemsSource="{Binding Trabajadores}" 
+                                  SelectedItem="{Binding TrabajadorSeleccionado}" 
+                                  DisplayMemberPath="NombreCompleto"
+                                  materialDesign:HintAssist.Hint="Seleccionar Trabajador"
+                                  Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,20" />
+
+                        <TextBlock Text="4. Fechas (Para Solicitudes)" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                        <Grid Margin="0,0,0,30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <DatePicker Grid.Column="0" SelectedDate="{Binding FechaInicio}" materialDesign:HintAssist.Hint="Fecha Inicio" Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                            <DatePicker Grid.Column="2" SelectedDate="{Binding FechaFin}" materialDesign:HintAssist.Hint="Fecha Fin" Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+                        </Grid>
+
+                        <!-- Panel de Vacaciones (Solo visible si hay trabajador) -->
+                        <StackPanel Margin="0,0,0,20" Visibility="{Binding TrabajadorSeleccionado, Converter={StaticResource NullToCollapsedConverter}}">
+                            <TextBlock Text="Resumen de Vacaciones" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Foreground="#64748B" Margin="0,0,0,10"/>
+                            <Border Background="#F1F5F9" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="15">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Disponibles" FontSize="10" Foreground="#64748B"/>
+                                        <TextBlock Text="{Binding DiasDisponibles, StringFormat=N1}" FontSize="16" FontWeight="Bold" Foreground="#10B981"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Usados" FontSize="10" Foreground="#64748B"/>
+                                        <TextBlock Text="{Binding DiasUsados}" FontSize="16" FontWeight="Bold" Foreground="#64748B"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="A Solicitar" FontSize="10" Foreground="#64748B"/>
+                                        <TextBox Text="{Binding DiasSolicitados, UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontWeight="Bold" Foreground="#3B82F6" 
+                                                 BorderThickness="0,0,0,1" Background="Transparent" Padding="0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <Button Command="{Binding GenerarDocumentoCommand}" Content="GENERAR DOCUMENTO" Height="50" 
+                                Background="#0F172A" BorderBrush="#0F172A" Foreground="White" FontSize="14" FontWeight="Bold"
+                                materialDesign:ButtonAssist.CornerRadius="8"/>
+                        
+                        <!-- Panel de Validación IA -->
+                        <Border Margin="0,15,0,0" CornerRadius="8" Padding="15"
+                                Visibility="{Binding MostrarValidacionIA, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#FEF3C7"/>
+                                    <Setter Property="BorderBrush" Value="#F59E0B"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UltimoAprobadoIA}" Value="True">
+                                            <Setter Property="Background" Value="#D1FAE5"/>
+                                            <Setter Property="BorderBrush" Value="#10B981"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding UltimoAprobadoIA}" Value="False">
+                                            <Setter Property="Background" Value="#FEE2E2"/>
+                                            <Setter Property="BorderBrush" Value="#EF4444"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="🤖 Validación IA" FontWeight="Bold" FontSize="13" Foreground="#0F172A"/>
+                                    <TextBlock Margin="10,0,0,0" FontWeight="Bold" FontSize="13">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="⚠️ Revisar"/>
+                                                <Setter Property="Foreground" Value="#B45309"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding UltimoAprobadoIA}" Value="True">
+                                                        <Setter Property="Text" Value="✅ Aprobado"/>
+                                                        <Setter Property="Foreground" Value="#059669"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding UltimoAprobadoIA}" Value="False">
+                                                        <Setter Property="Text" Value="❌ Requiere Corrección"/>
+                                                        <Setter Property="Foreground" Value="#DC2626"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <TextBlock Text="Score de Cumplimiento: " FontSize="12" Foreground="#64748B"/>
+                                    <TextBlock Text="{Binding UltimoScoreIA, StringFormat='{}{0}%'}" FontSize="12" FontWeight="Bold" Foreground="#0F172A"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding UltimoResumenIA}" TextWrapping="Wrap" FontSize="11" Foreground="#475569" Margin="0,0,0,8"/>
+                                
+                                <!-- Mejoras Sugeridas -->
+                                <ItemsControl ItemsSource="{Binding MejorasIA}" Margin="0,5,0,0">
+                                    <ItemsControl.Style>
+                                        <Style TargetType="ItemsControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding MejorasIA.Count}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ItemsControl.Style>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0,6,0,0">
+                                                <TextBlock Text="💡" FontSize="12" DockPanel.Dock="Left" Margin="0,0,8,0" VerticalAlignment="Top"/>
+                                                <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="11" Foreground="#1E293B"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            </ScrollViewer>
+
+            <!-- COLUMNA DERECHA: HISTORIAL -->
+            <Grid Grid.Column="1">
+                <Border Style="{StaticResource EstiloCardContenido}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Historial de Generación" FontSize="18" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,20"/>
+
+                        <DataGrid Grid.Row="1" ItemsSource="{Binding Historial}" SelectedItem="{Binding DocumentoSeleccionado}" 
+                                  AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                                  Background="Transparent" BorderThickness="0" MaxHeight="600"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                  FrozenColumnCount="1">
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Foreground" Value="#64748B"/>
+                                    <Setter Property="FontSize" Value="11"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="Background" Value="White"/>
+                                </Style>
+                                <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="FECHA" Binding="{Binding FechaGenerado, StringFormat='dd/MM/yyyy HH:mm'}" Width="130" Foreground="#64748B" CanUserResize="False"/>
+                                <DataGridTextColumn Header="DOCUMENTO" Binding="{Binding Plantilla.Nombre}" Width="*" MinWidth="150" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                <DataGridTextColumn Header="EMPRESA" Binding="{Binding Empresa.RazonSocial}" Width="160" Foreground="#64748B"/>
+                                <DataGridTextColumn Header="TRABAJADOR" Binding="{Binding Trabajador.NombreCompleto}" Width="150" Foreground="#64748B"/>
+                                <DataGridTextColumn Header="V." Binding="{Binding Version}" Width="35" Foreground="#64748B" CanUserResize="False"/>
+                                <DataGridTextColumn Header="SCORE" Binding="{Binding ScoreCumplimiento, StringFormat='{}{0}%'}" Width="55" Foreground="#0F172A" FontWeight="SemiBold" CanUserResize="False"/>
+                                <DataGridTemplateColumn Header="ACCIONES" Width="100" CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button Content="WORD" 
+                                                        Command="{Binding DataContext.AbrirDocumentoCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                        Style="{StaticResource MaterialDesignFlatButton}" Foreground="#2563EB" FontWeight="Bold" Padding="5,0" Height="28" FontSize="10" Margin="0,0,3,0" />
+                                                <Button Content="PDF" 
+                                                        Command="{Binding DataContext.AbrirPdfCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                        Style="{StaticResource MaterialDesignFlatButton}" Foreground="#DC2626" FontWeight="Bold" Padding="5,0" Height="28" FontSize="10" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+        
+        <!-- OVERLAY DE CARGA -->
+        <Grid Grid.RowSpan="2" 
+              Visibility="{Binding IsGenerando, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="#88000000"/>
+            <Border Background="White" CornerRadius="16" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Width="400" Padding="30">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" ShadowDepth="5" Opacity="0.3"/>
+                </Border.Effect>
+                <StackPanel HorizontalAlignment="Center">
+                    <ProgressBar IsIndeterminate="True" Height="6" 
+                                 Margin="0,0,0,20" Foreground="#3B82F6"
+                                 materialDesign:TransitionAssist.DisableTransitions="True"/>
+                    <TextBlock Text="{Binding ProgresoTexto}" 
+                               FontSize="16" FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" Foreground="#0F172A"/>
+                    <TextBlock Text="Por favor espera mientras procesamos tu solicitud..." 
+                               FontSize="12" Foreground="#64748B" 
+                               HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                    <ProgressBar Value="{Binding ProgresoValor}" Maximum="100" 
+                                 Height="4" Margin="0,15,0,0" Foreground="#10B981"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

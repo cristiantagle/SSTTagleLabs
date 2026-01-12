@@ -1,0 +1,359 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.LugarTrabajoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1400">
+    <UserControl.Resources>
+        <!-- Estilo para cards de paso -->
+        <Style x:Key="EstiloPasoCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Estilo para número de paso -->
+        <Style x:Key="EstiloNumeroPaso" TargetType="Border">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Background" Value="#3B82F6"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F1F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Padding="30,25">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0F172A" Offset="0"/>
+                    <GradientStop Color="#1E293B" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel>
+                <TextBlock Text="Generación de Documentos" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Seleccione lugar, plantilla y trabajadores para generar documentos" 
+                           FontSize="14" Foreground="#94A3B8" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- CONTENIDO: 4 PASOS EN FILA -->
+        <Grid Grid.Row="1" Margin="30,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ========== PASO 1: LUGAR DE TRABAJO ========== -->
+            <Border Grid.Column="0" Style="{StaticResource EstiloPasoCard}" Margin="0,0,15,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header Paso -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Border Style="{StaticResource EstiloNumeroPaso}">
+                            <TextBlock Text="1" Foreground="White" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Lugar" FontWeight="Bold" FontSize="16" 
+                                   Foreground="#0F172A" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Crear nuevo lugar -->
+                    <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                        <TextBox Text="{Binding NuevoLugarNombre, UpdateSourceTrigger=PropertyChanged}" 
+                                 materialDesign:HintAssist.Hint="Nombre (ej: Agrosuper)" 
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 FontSize="12" Margin="0,0,0,5"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding NuevoLugarCodigo, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Código (ej: AGS)" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     FontSize="12" CharacterCasing="Upper" MaxLength="10"/>
+                            <Button Grid.Column="1" Command="{Binding CrearLugarCommand}" 
+                                    Style="{StaticResource MaterialDesignIconButton}" 
+                                    Margin="5,0,0,0" ToolTip="Crear lugar" Width="36" Height="36">
+                                <materialDesign:PackIcon Kind="Plus" Foreground="#10B981"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Lista de lugares -->
+                    <ListBox Grid.Row="2" ItemsSource="{Binding Lugares}" 
+                             SelectedItem="{Binding LugarSeleccionado}"
+                             Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5,8">
+                                    <TextBlock Text="{Binding Nombre}" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                    <TextBlock Text="{Binding Codigo}" FontSize="11" Foreground="#64748B"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- ========== PASO 2: PLANTILLA (desde carpeta) ========== -->
+            <Border Grid.Column="1" Style="{StaticResource EstiloPasoCard}" Margin="0,0,15,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header Paso -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Border Style="{StaticResource EstiloNumeroPaso}" Background="#8B5CF6">
+                            <TextBlock Text="2" Foreground="White" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Plantilla" FontWeight="Bold" FontSize="16" 
+                                   Foreground="#0F172A" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Dropdown de plantillas -->
+                    <ComboBox Grid.Row="1" ItemsSource="{Binding PlantillasDisponibles}" 
+                              SelectedItem="{Binding PlantillaSeleccionada}"
+                              DisplayMemberPath="NombreDocumento"
+                              materialDesign:HintAssist.Hint="Seleccionar plantilla..."
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              Margin="0,0,0,10"/>
+
+                    <!-- Info de plantilla seleccionada -->
+                    <Border Grid.Row="2" Background="#F8FAFC" CornerRadius="8" Padding="12"
+                            Visibility="{Binding TienePlantillaSeleccionada, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding PlantillaSeleccionada.NombreDocumento}" 
+                                       FontWeight="SemiBold" Foreground="#0F172A" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding PlantillaSeleccionada.Codigo}" 
+                                       FontSize="11" Foreground="#64748B" Margin="0,3,0,0"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <materialDesign:PackIcon Kind="FileDocument" Foreground="#64748B" Width="14" Height="14"/>
+                                <TextBlock FontSize="11" Foreground="#64748B" Margin="5,0,0,0"
+                                           Text="Archivo cargado" ToolTip="{Binding PlantillaSeleccionada.RutaPlantilla}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Botón escanear carpeta -->
+                    <Button Grid.Row="3" Command="{Binding EscanearPlantillasCommand}" 
+                            Content="📁 Escanear Carpeta" Height="35" Margin="0,10,0,0"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Foreground="#64748B" BorderBrush="#E2E8F0"/>
+                </Grid>
+            </Border>
+
+            <!-- ========== PASO 3: TRABAJADORES ========== -->
+            <Border Grid.Column="2" Style="{StaticResource EstiloPasoCard}" Margin="0,0,15,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header Paso -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Border Style="{StaticResource EstiloNumeroPaso}" Background="#10B981">
+                            <TextBlock Text="3" Foreground="White" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Trabajadores" FontWeight="Bold" FontSize="16" 
+                                   Foreground="#0F172A" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBlock Foreground="#64748B" VerticalAlignment="Center" Margin="10,0,0,0">
+                            <Run Text="("/>
+                            <Run Text="{Binding TrabajadoresSeleccionadosCount, Mode=OneWay}"/>
+                            <Run Text=" seleccionados)"/>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <!-- Seleccionar todos -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                        <CheckBox Content="Seleccionar todos" 
+                                  IsChecked="{Binding SeleccionarTodos}"
+                                  Foreground="#64748B"/>
+                    </StackPanel>
+
+                    <!-- Lista con checkboxes -->
+                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding TrabajadoresDisponibles}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="6" Margin="0,2" Padding="10,8">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                        <Setter Property="Background" Value="#EEF2FF"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Center"/>
+                                            <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                                <TextBlock Text="{Binding Trabajador.NombreCompleto}" 
+                                                           FontWeight="Medium" Foreground="#0F172A"/>
+                                                <TextBlock Foreground="#64748B" FontSize="11">
+                                                    <Run Text="{Binding Trabajador.Cargo, Mode=OneWay}"/>
+                                                    <Run Text=" • "/>
+                                                    <Run Text="{Binding Trabajador.Rut, Mode=OneWay}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- ========== PASO 4: DATOS ADICIONALES Y GENERAR ========== -->
+            <Border Grid.Column="3" Style="{StaticResource EstiloPasoCard}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header Paso -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <Border Style="{StaticResource EstiloNumeroPaso}" Background="#F59E0B">
+                            <TextBlock Text="4" Foreground="White" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Datos" FontWeight="Bold" FontSize="16" 
+                                   Foreground="#0F172A" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <!-- Campos adicionales con scroll -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBox Text="{Binding NuevaCharlaTema, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Tema" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     Margin="0,0,0,8" FontSize="12"/>
+                            
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <DatePicker Grid.Column="0" SelectedDate="{Binding NuevaCharlaFecha}" 
+                                            materialDesign:HintAssist.Hint="Fecha" 
+                                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" Margin="0,0,4,0"/>
+                                <TextBox Grid.Column="1" Text="{Binding NuevaCharlaHora, UpdateSourceTrigger=PropertyChanged}" 
+                                         materialDesign:HintAssist.Hint="Hora (HH:mm)" 
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                         FontSize="12" Margin="4,0,0,0"/>
+                            </Grid>
+                            
+                            <TextBox Text="{Binding NuevaCharlaExpositor, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Expositor" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     Margin="0,0,0,8" FontSize="12"/>
+                            
+                            <TextBox Text="{Binding NuevaCharlaDuracion, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Duración (min)" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     Margin="0,0,0,8" FontSize="12"/>
+                            
+                            <!-- OBJETIVO (checkboxes) -->
+                            <TextBlock Text="Objetivo:" FontWeight="Medium" Foreground="#64748B" Margin="0,5,0,5"/>
+                            <WrapPanel>
+                                <CheckBox Content="Charla" IsChecked="{Binding ObjCharla}" Margin="0,0,10,5"/>
+                                <CheckBox Content="Capacitación" IsChecked="{Binding ObjCapacitacion}" Margin="0,0,10,5"/>
+                                <CheckBox Content="Reinducción" IsChecked="{Binding ObjReinduccion}" Margin="0,0,10,5"/>
+                                <CheckBox Content="Inspección" IsChecked="{Binding ObjInspeccion}" Margin="0,0,10,5"/>
+                                <CheckBox Content="Otros" IsChecked="{Binding ObjOtros}" Margin="0,0,0,5"/>
+                            </WrapPanel>
+                            
+                            <!-- OBSERVACIONES -->
+                            <TextBox Text="{Binding NuevaCharlaObservaciones, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Observaciones" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     AcceptsReturn="True" TextWrapping="Wrap" MinHeight="50"
+                                     Margin="0,8,0,8" FontSize="12"/>
+                            
+                            <!-- ACUERDOS -->
+                            <TextBox Text="{Binding NuevaCharlaAcuerdos, UpdateSourceTrigger=PropertyChanged}" 
+                                     materialDesign:HintAssist.Hint="Acuerdos" 
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                                     AcceptsReturn="True" TextWrapping="Wrap" MinHeight="50"
+                                     Margin="0,0,0,8" FontSize="12"/>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Botón GENERAR -->
+                    <Button Grid.Row="2" Command="{Binding GenerarDocumentoUnicoCommand}" 
+                            Height="50" Margin="0,10,0,0"
+                            Background="#10B981" BorderBrush="#10B981" Foreground="White"
+                            materialDesign:ButtonAssist.CornerRadius="8">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileDocumentCheck" Width="24" Height="24" VerticalAlignment="Center"/>
+                            <TextBlock Text="GENERAR" FontWeight="Bold" FontSize="14" 
+                                       VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- FOOTER: Status -->
+        <Border Grid.Row="2" Background="White" Padding="20,15">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="📁 Carpeta plantillas:" Foreground="#64748B" VerticalAlignment="Center"/>
+                    <TextBlock Text="Templates/LugaresTrabajo/" Foreground="#3B82F6" 
+                               Margin="8,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#64748B" 
+                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Loading Overlay -->
+        <Border Grid.RowSpan="3" Background="#80000000" 
+                Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                             IsIndeterminate="True" Width="50" Height="50"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="White" Margin="0,15,0,0" FontSize="14"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

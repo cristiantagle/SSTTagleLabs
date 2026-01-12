@@ -1,0 +1,366 @@
+[
+  {
+    "Codigo": "CONST",
+    "Nombre": "Construcción",
+    "Descripcion": "Obras de edificación y obras civiles",
+    "Actividades": [
+      {
+        "Nombre": "Excavación y Movimiento de Tierras",
+        "Descripcion": "Uso de maquinaria pesada y excavación manual",
+        "Tareas": [
+          {
+            "Nombre": "Operación de Retroexcavadora",
+            "Descripcion": "Manejo de maquinaria para zanjas",
+            "RiesgosTipicos": [
+              "Volcamiento de maquinaria",
+              "Atrapamiento por partes móviles"
+            ]
+          },
+          {
+            "Nombre": "Perfilado manual de zanjas",
+            "Descripcion": "Uso de pala y picota al interior de zanja",
+            "RiesgosTipicos": [
+              "Derrumbe de paredes/zanjas",
+              "Golpeado por objeto en movimiento/caída"
+            ]
+          },
+          {
+            "Nombre": "Instalación de señalética vial",
+            "Descripcion": "Colocación de conos y letreros en vía pública",
+            "RiesgosTipicos": [
+              "Golpeado por objeto en movimiento/caída",
+              "Caída al mismo nivel (tropiezos, resbalones)"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Trabajos en Altura (Estructural)",
+        "Descripcion": "Montaje de estructuras, techumbres y fachadas",
+        "Tareas": [
+          {
+            "Nombre": "Instalación de techumbre",
+            "Descripcion": "Colocación de planchas de zinc sobre costaneras",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Radiación UV Solar"
+            ]
+          },
+          {
+            "Nombre": "Armado de andamios",
+            "Descripcion": "Montaje de cuerpos de andamio",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Golpeado por objeto en movimiento/caída"
+            ]
+          },
+          {
+            "Nombre": "Soldadura en altura",
+            "Descripcion": "Unión de estructuras metálicas sobre nivel 1.8m",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Humos metálicos de soldadura",
+              "Proyección de partículas incandescentes"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Obras de Hormigón",
+        "Descripcion": "Enfierradura, moldaje y hormigonado",
+        "Tareas": [
+          {
+            "Nombre": "Descarga de camión mixer",
+            "Descripcion": "Vaciado de hormigón mediante canoa o bomba",
+            "RiesgosTipicos": [
+              "Atrapamiento por partes móviles",
+              "Contacto con energía eléctrica (Directo/Indirecto)"
+            ]
+          },
+          {
+            "Nombre": "Vibrado de hormigón",
+            "Descripcion": "Uso de sonda vibradora",
+            "RiesgosTipicos": [
+              "Vibraciones (Mano-brazo / Cuerpo entero)",
+              "Contacto con energía eléctrica (Directo/Indirecto)"
+            ]
+          },
+          {
+            "Nombre": "Descimbre de muros",
+            "Descripcion": "Retiro de moldajes metálicos o madera",
+            "RiesgosTipicos": [
+              "Golpeado por objeto en movimiento/caída",
+              "Cortes con herramientas cortopunzantes"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Codigo": "IND",
+    "Nombre": "Industria Manufacturera",
+    "Descripcion": "Procesos de transformación industrial",
+    "Actividades": [
+      {
+        "Nombre": "Soldadura y Corte",
+        "Descripcion": "Unión de metales (Arco, TIG, MIG, Oxicorte)",
+        "Tareas": [
+          {
+            "Nombre": "Soldadura al arco manual",
+            "Descripcion": "Unión de piezas con electrodo revestido",
+            "RiesgosTipicos": [
+              "Humos metálicos de soldadura",
+              "Radiación UV Solar",
+              "Proyección de partículas incandescentes"
+            ]
+          },
+          {
+            "Nombre": "Esmerilado de uniones",
+            "Descripcion": "Uso de galletera angular",
+            "RiesgosTipicos": [
+              "Proyección de partículas incandescentes",
+              "Exposición a Ruido (PREXOR)",
+              "Cortes con herramientas cortopunzantes"
+            ]
+          },
+          {
+            "Nombre": "Corte con oxicorte",
+            "Descripcion": "Uso de soplete con oxígeno y gas",
+            "RiesgosTipicos": [
+              "Humos metálicos de soldadura",
+              "Proyección de partículas incandescentes"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Mantenimiento Mecánico",
+        "Descripcion": "Reparación de maquinaria industrial",
+        "Tareas": [
+          {
+            "Nombre": "Lubricación de rodamientos",
+            "Descripcion": "Aplicación de grasa en partes móviles",
+            "RiesgosTipicos": [
+              "Atrapamiento por partes móviles"
+            ]
+          },
+          {
+            "Nombre": "Cambio de correas transportadoras",
+            "Descripcion": "Sustitución de bandas de goma",
+            "RiesgosTipicos": [
+              "Atrapamiento por partes móviles",
+              "Manejo Manual de Cargas (MMC)"
+            ]
+          },
+          {
+            "Nombre": "Limpieza de tableros eléctricos",
+            "Descripcion": "Aspirado y reapriete de conexiones",
+            "RiesgosTipicos": [
+              "Contacto con energía eléctrica (Directo/Indirecto)"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Codigo": "MIN",
+    "Nombre": "Minería",
+    "Descripcion": "Extracción de minerales",
+    "Actividades": [
+      {
+        "Nombre": "Perforación y Tronadura",
+        "Descripcion": "Extracción de material rocoso",
+        "Tareas": [
+          {
+            "Nombre": "Carguío de explosivos",
+            "Descripcion": "Manipulación de anfo y detonadores",
+            "RiesgosTipicos": [
+              "Exposición a Sílice Libre (PLANESI)",
+              "Exposición a Ruido (PREXOR)"
+            ]
+          },
+          {
+            "Nombre": "Operación de Jumbo",
+            "Descripcion": "Perforación mecanizada en frente",
+            "RiesgosTipicos": [
+              "Caída de rocas (Planchoneo)",
+              "Exposición a Ruido (PREXOR)",
+              "Vibraciones (Mano-brazo / Cuerpo entero)"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Procesamiento de Mineral",
+        "Descripcion": "Chancado y molienda",
+        "Tareas": [
+          {
+            "Nombre": "Operación de Chancador Primario",
+            "Descripcion": "Control de alimentación de roca",
+            "RiesgosTipicos": [
+              "Exposición a Sílice Libre (PLANESI)",
+              "Exposición a Ruido (PREXOR)"
+            ]
+          },
+          {
+            "Nombre": "Mantenimiento de Molino SAG",
+            "Descripcion": "Cambio de revestimientos interiores",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Atrapamiento por partes móviles",
+              "Espacio Confinado"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Codigo": "TRANS",
+    "Nombre": "Transporte y Logística",
+    "Descripcion": "Transporte de carga y pasajeros, almacenamiento",
+    "Actividades": [
+      {
+        "Nombre": "Conducción de Vehículos",
+        "Descripcion": "Transporte de carga en carretera y ciudad",
+        "Tareas": [
+          {
+            "Nombre": "Conducción de camión articulado",
+            "Descripcion": "Transporte interurbano de carga",
+            "RiesgosTipicos": [
+              "Fatiga y Somnolencia",
+              "Volcamiento de vehículo"
+            ]
+          },
+          {
+            "Nombre": "Estiba y desestiba de carga",
+            "Descripcion": "Aseguramiento de la carga con eslingas",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Golpeado por objeto en movimiento/caída"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Operación de Bodega",
+        "Descripcion": "Almacenamiento y logística",
+        "Tareas": [
+          {
+            "Nombre": "Operación de Grúa Horquilla",
+            "Descripcion": "Movimiento de pallets en altura",
+            "RiesgosTipicos": [
+              "Volcamiento de maquinaria",
+              "Atropello de peatones"
+            ]
+          },
+          {
+            "Nombre": "Picking manual",
+            "Descripcion": "Selección de productos en estanterías",
+            "RiesgosTipicos": [
+              "Manejo Manual de Cargas (MMC)",
+              "Caída al mismo nivel (tropiezos, resbalones)"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Codigo": "SERV",
+    "Nombre": "Servicios y Comercio",
+    "Descripcion": "Oficinas, retail, educación, salud",
+    "Actividades": [
+      {
+        "Nombre": "Trabajo Administrativo",
+        "Descripcion": "Uso de pantallas y atención de público",
+        "Tareas": [
+          {
+            "Nombre": "Digitación de datos",
+            "Descripcion": "Uso intensivo de teclado y mouse",
+            "RiesgosTipicos": [
+              "Posturas forzadas o estáticas",
+              "Movimientos Repetitivos (TMERT)"
+            ]
+          },
+          {
+            "Nombre": "Atención de clientes presencial",
+            "Descripcion": "Interacción en mesón de atención",
+            "RiesgosTipicos": [
+              "Alta exigencia psicológica (Ritmo, Cantidad)",
+              "Agresión de terceros"
+            ]
+          },
+          {
+            "Nombre": "Archivo de documentación",
+            "Descripcion": "Manejo manual de archivadores en altura",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)",
+              "Manejo Manual de Cargas (MMC)"
+            ]
+          }
+        ]
+      },
+      {
+        "Nombre": "Aseo y Limpieza",
+        "Descripcion": "Higiene de instalaciones",
+        "Tareas": [
+          {
+            "Nombre": "Limpieza de pisos",
+            "Descripcion": "Uso de mopa y productos químicos",
+            "RiesgosTipicos": [
+              "Caída al mismo nivel (tropiezos, resbalones)",
+              "Exposición a productos químicos de aseo"
+            ]
+          },
+          {
+            "Nombre": "Limpieza de vidrios en altura",
+            "Descripcion": "Uso de andamios o escaleras",
+            "RiesgosTipicos": [
+              "Caída a distinto nivel (> 1.8m)"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Codigo": "SALUD",
+    "Nombre": "Salud y Asistencia Social",
+    "Descripcion": "Hospitales, clínicas y laboratorios",
+    "Actividades": [
+      {
+        "Nombre": "Atención Clínica",
+        "Descripcion": "Atención directa a pacientes",
+        "Tareas": [
+          {
+            "Nombre": "Toma de muestras de sangre",
+            "Descripcion": "Punción venosa",
+            "RiesgosTipicos": [
+              "Exposición a agentes biológicos (Sangre/Fluidos)",
+              "Pinchazo con aguja"
+            ]
+          },
+          {
+            "Nombre": "Movilización de pacientes",
+            "Descripcion": "Traslado de enfermos en cama o silla",
+            "RiesgosTipicos": [
+              "Manejo Manual de Cargas (Pacientes)",
+              "Posturas forzadas o estáticas"
+            ]
+          },
+          {
+            "Nombre": "Manipulación de residuos REAS",
+            "Descripcion": "Retiro de desechos biológicos",
+            "RiesgosTipicos": [
+              "Exposición a agentes biológicos (Sangre/Fluidos)",
+              "Cortes con material punzocortante"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

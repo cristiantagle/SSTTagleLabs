@@ -1,0 +1,109 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           TAGLELABS GESTOR SST - GUÍA RÁPIDA                    ║
+║                     Versión 1.0.0                                ║
+╚══════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════
+ REQUISITOS DEL SISTEMA
+═══════════════════════════════════════════════════════════════════
+
+• Windows 10 o superior (64 bits)
+• 4 GB RAM mínimo (8 GB recomendado)
+• 500 MB espacio en disco
+• Conexión a Internet (para funciones de IA)
+
+═══════════════════════════════════════════════════════════════════
+ INSTALACIÓN
+═══════════════════════════════════════════════════════════════════
+
+1. Descomprima el archivo ZIP en la ubicación deseada
+   (Ejemplo: C:\Programas\TagleLabsGestorSST)
+
+2. Ejecute: TagleLabsGestorSST.UI.exe
+
+3. ¡Listo! No requiere instalación adicional.
+
+═══════════════════════════════════════════════════════════════════
+ PRIMEROS PASOS
+═══════════════════════════════════════════════════════════════════
+
+1. CREAR UNA EMPRESA
+   - Vaya a "Empresas" en el menú lateral
+   - Haga clic en "Nueva Empresa"
+   - Complete los datos: RUT, Razón Social, Dirección
+   - Asigne un Rubro para la generación de riesgos por IA
+
+2. AGREGAR TRABAJADORES
+   - Ingrese a la empresa creada
+   - Seleccione la pestaña "Trabajadores"
+   - Agregue los datos de cada trabajador
+
+3. GENERAR MATRIZ DE RIESGOS (MIPER)
+   - Vaya a "Matriz MIPER"
+   - Seleccione la empresa y centro de trabajo
+   - Use "Generar Riesgos con IA" para sugerencias automáticas
+   - O agregue riesgos manualmente
+
+4. CREAR DOCUMENTOS
+   - Vaya a "Documentos"
+   - Seleccione el tipo de documento (IRL, RIOHS, etc.)
+   - Complete los datos requeridos
+   - Haga clic en "Generar"
+
+═══════════════════════════════════════════════════════════════════
+ ESTRUCTURA DE CARPETAS
+═══════════════════════════════════════════════════════════════════
+
+📁 TagleLabsGestorSST/
+├── TagleLabsGestorSST.UI.exe   → Ejecutable principal
+├── Templates/                   → Plantillas de documentos
+├── Outputs/                     → Documentos generados
+└── TagleLabs.db                 → Base de datos (se crea automáticamente)
+
+═══════════════════════════════════════════════════════════════════
+ RESPALDOS
+═══════════════════════════════════════════════════════════════════
+
+Su información se almacena en el archivo: TagleLabs.db
+
+Para hacer respaldo:
+1. Cierre la aplicación
+2. Copie el archivo TagleLabs.db a una ubicación segura
+
+Para restaurar:
+1. Cierre la aplicación
+2. Reemplace TagleLabs.db por su respaldo
+
+═══════════════════════════════════════════════════════════════════
+ SOLUCIÓN DE PROBLEMAS
+═══════════════════════════════════════════════════════════════════
+
+❌ La aplicación no inicia
+   → Verifique que está usando Windows 10+ de 64 bits
+   → Ejecute como Administrador
+
+❌ Error de IA / No genera riesgos
+   → Verifique su conexión a Internet
+   → Verifique que el archivo gemini.key existe
+
+❌ Documentos no se generan
+   → Verifique que la carpeta Templates/ existe
+   → Verifique permisos de escritura en Outputs/
+
+═══════════════════════════════════════════════════════════════════
+ SOPORTE
+═══════════════════════════════════════════════════════════════════
+
+Para soporte técnico, contacte a:
+• Email: soporte@taglelabs.cl
+• Teléfono: +56 X XXXX XXXX
+
+═══════════════════════════════════════════════════════════════════
+ INFORMACIÓN LEGAL
+═══════════════════════════════════════════════════════════════════
+
+TagleLabs Gestor SST © 2025
+Software de gestión de Seguridad y Salud en el Trabajo
+Cumplimiento DS44, Ley Karin (21.643) y normativa chilena vigente.
+
+═══════════════════════════════════════════════════════════════════

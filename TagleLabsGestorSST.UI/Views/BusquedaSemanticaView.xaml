@@ -1,0 +1,186 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.BusquedaSemanticaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="#F8FAFC">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="30,25">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#6366F1" Offset="0"/>
+                    <GradientStop Color="#8B5CF6" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel>
+                <TextBlock Text="🔍 Búsqueda Semántica en Base de Conocimientos" 
+                           FontSize="24" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Busca en la normativa legal, DS44, Ley Karin y documentos internos usando IA" 
+                           FontSize="14" Foreground="#E2E8F0" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Search Bar -->
+        <Border Grid.Row="1" Background="White" Padding="30,20" 
+                BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" 
+                         Text="{Binding Consulta, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="16" Padding="15,12"
+                         materialDesign:HintAssist.Hint="Ej: ¿Qué obligaciones tiene una empresa con más de 100 trabajadores?"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         VerticalAlignment="Center">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding BuscarCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <Button Grid.Column="1" Content="🔍 BUSCAR" 
+                        Command="{Binding BuscarCommand}"
+                        IsEnabled="{Binding Buscando, Converter={StaticResource InverseBooleanConverter}}"
+                        Margin="15,0,0,0" Padding="20,0" Height="46"
+                        FontWeight="Bold" FontSize="14"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BotonPrimario}"
+                        Background="#6366F1"/>
+
+                <Button Grid.Column="2" 
+                        Command="{Binding LimpiarBusquedaCommand}"
+                        ToolTip="Limpiar búsqueda"
+                        Margin="10,0,0,0" Padding="15,0" Height="46"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BotonSecundario}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Close" Width="18" Height="18" VerticalAlignment="Center"/>
+                        <TextBlock Text="LIMPIAR" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Results Area -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel: Results List -->
+            <Border Grid.Column="0" Background="#F1F5F9" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Stats -->
+                    <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold" Foreground="#1E293B">
+                                <Run Text="📊 "/>
+                                <Run Text="{Binding TotalResultados}"/>
+                                <Run Text=" resultados"/>
+                            </TextBlock>
+                            <TextBlock Text="{Binding TiempoBusqueda}" Foreground="#64748B" FontSize="11" Margin="0,5,0,0"/>
+                            <TextBlock Text="{Binding EstadoBusqueda}" Foreground="#8B5CF6" FontSize="12" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Results List -->
+                    <ListBox Grid.Row="1" 
+                             ItemsSource="{Binding ResultadosLista}"
+                             Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White" CornerRadius="8" Padding="12" Margin="0,0,0,10"
+                                        BorderBrush="#E2E8F0" BorderThickness="1"
+                                        Cursor="Hand">
+                                    <Border.InputBindings>
+                                        <MouseBinding MouseAction="LeftDoubleClick" 
+                                                      Command="{Binding DataContext.PreguntarSobreResultadoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                      CommandParameter="{Binding}"/>
+                                    </Border.InputBindings>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Number Badge -->
+                                        <Border Grid.Column="0" Background="#6366F1" CornerRadius="15" 
+                                                Width="25" Height="25" VerticalAlignment="Top">
+                                            <TextBlock Text="{Binding Numero}" Foreground="White" 
+                                                       FontWeight="Bold" FontSize="11"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        
+                                        <!-- Content -->
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                                            <TextBlock Text="{Binding Contenido}" TextWrapping="Wrap"
+                                                       Foreground="#1E293B" FontSize="12"
+                                                       MaxHeight="60" TextTrimming="CharacterEllipsis"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                                <TextBlock Text="🎯" FontSize="10"/>
+                                                <TextBlock Text="{Binding Relevancia, StringFormat='{}{0:P0}'}" 
+                                                           Foreground="#10B981" FontSize="10" FontWeight="Bold" Margin="5,0,0,0"/>
+                                                <TextBlock Text="📄" FontSize="10" Margin="15,0,0,0"/>
+                                                <TextBlock Text="{Binding Fuente}" 
+                                                           Foreground="#64748B" FontSize="10" Margin="5,0,0,0"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Right Panel: Full Response -->
+            <Border Grid.Column="1" Padding="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="📝 Respuesta Completa" 
+                               FontWeight="Bold" FontSize="16" Foreground="#1E293B" Margin="0,0,0,15"/>
+
+                    <!-- Loading Indicator -->
+                    <StackPanel Grid.Row="1" Visibility="{Binding Buscando, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <ProgressBar IsIndeterminate="True" Width="200" Height="4"
+                                     Style="{StaticResource MaterialDesignLinearProgressBar}"/>
+                        <TextBlock Text="{Binding EstadoBusqueda}" 
+                                   HorizontalAlignment="Center" Margin="0,15,0,0"
+                                   Foreground="#6366F1" FontSize="14"/>
+                    </StackPanel>
+
+                    <!-- Results Text -->
+                    <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="20"
+                            Visibility="{Binding Buscando, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding Resultados}" TextWrapping="Wrap"
+                                       FontSize="14" LineHeight="24" Foreground="#334155"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

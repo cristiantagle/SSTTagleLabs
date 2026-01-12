@@ -1,0 +1,618 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.MatrizRiesgosView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="900" d:DesignWidth="1400">
+    
+    <Grid Background="{StaticResource BrushFondo}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============================================ -->
+        <!-- HEADER COMPACTO                             -->
+        <!-- ============================================ -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Height="120">
+            <Grid Margin="40,15,40,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Matriz MIPER" FontSize="26" FontWeight="Bold" Foreground="White" FontFamily="{StaticResource FontTitulos}"/>
+                    <TextBlock Text="Identificación de Peligros y Evaluación de Riesgos" FontSize="12" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                </StackPanel>
+                
+                <!-- Selectores con labels claros -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#26FFFFFF" CornerRadius="8" Padding="12,8" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="EMPRESA" FontSize="9" Foreground="#94A3B8" FontWeight="Bold"/>
+                            <ComboBox ItemsSource="{Binding Empresas}"
+                                      SelectedItem="{Binding EmpresaSeleccionada, Mode=TwoWay}"
+                                      DisplayMemberPath="RazonSocial"
+                                      MinWidth="200" FontSize="12" Foreground="White"
+                                      Background="Transparent" BorderThickness="0"
+                                      Style="{StaticResource MaterialDesignComboBox}"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Background="#26FFFFFF" CornerRadius="8" Padding="12,8" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="CENTRO DE TRABAJO" FontSize="9" Foreground="#94A3B8" FontWeight="Bold"/>
+                            <ComboBox ItemsSource="{Binding CentrosTrabajo}"
+                                      SelectedItem="{Binding CentroSeleccionado, Mode=TwoWay}"
+                                      DisplayMemberPath="Nombre"
+                                      MinWidth="150" FontSize="12" Foreground="White"
+                                      Background="Transparent" BorderThickness="0"
+                                      Style="{StaticResource MaterialDesignComboBox}"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- BOTÓN EXPANDIR A VENTANA -->
+                    <Button Click="ExpandirVentana_Click"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                            Background="#6366F1" Foreground="White" 
+                            Padding="15,10" 
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            ToolTip="Abrir MIPER en ventana separada para más espacio">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ArrowExpand" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXPANDIR" Margin="8,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <!-- BOTÓN EXPORTAR A EXCEL -->
+                    <Button Command="{Binding ExportarExcelCommand}"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                            Background="#10B981" Foreground="White" 
+                            Padding="15,10" Margin="10,0,0,0"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            ToolTip="Exportar matriz a Excel con formato">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="MicrosoftExcel" Width="18" Height="18" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXCEL" Margin="8,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- CONTENIDO PRINCIPAL                         -->
+        <!-- ============================================ -->
+        <Border Grid.Row="1" Style="{StaticResource EstiloCardContenido}" Margin="40,-20,40,30">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- BARRA DE NAVEGACIÓN CON TABS CLAROS -->
+                <Border Background="White" CornerRadius="12,12,0,0" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Padding="15,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- TABS PROMINENTES -->
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="TabVerMatriz" IsChecked="True" GroupName="MiperTabs" 
+                                         Style="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}"
+                                         Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <materialDesign:PackIcon Kind="ViewList" Width="18" Height="18" VerticalAlignment="Center"/>
+                                    <TextBlock Text="📋 Ver Riesgos" FontWeight="SemiBold" FontSize="13" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+                            
+                            <RadioButton x:Name="TabAgregar" GroupName="MiperTabs"
+                                         Style="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}"
+                                         Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <materialDesign:PackIcon Kind="PlusCircle" Width="18" Height="18" VerticalAlignment="Center"/>
+                                    <TextBlock Text="➕ Agregar Nuevo" FontWeight="SemiBold" FontSize="13" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+                            
+                            <RadioButton x:Name="TabIA" GroupName="MiperTabs"
+                                         Style="{StaticResource MaterialDesignChoiceChipPrimaryOutlineRadioButton}">
+                                <StackPanel Orientation="Horizontal" Margin="10,5">
+                                    <materialDesign:PackIcon Kind="RobotHappy" Width="18" Height="18" VerticalAlignment="Center"/>
+                                    <TextBlock Text="🤖 Asistente IA" FontWeight="SemiBold" FontSize="13" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </StackPanel>
+                        
+                        <!-- CONTADOR Y ACCIONES -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Border Background="#10B981" CornerRadius="20" Padding="12,6" Margin="0,0,10,0" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding MatrizView.Count, FallbackValue=0}" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                                    <TextBlock Text=" riesgos" Foreground="White" FontSize="12" Opacity="0.9"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Button Command="{Binding GenerarIRLCommand}" 
+                                    Background="#059669" BorderBrush="#059669" 
+                                    ToolTip="Genera un documento PDF/Word con todos los riesgos identificados"
+                                    Height="36">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="FileDocument" Width="16" Height="16" Foreground="White"/>
+                                    <TextBlock Text="Exportar IRL" Foreground="White" Margin="6,0,0,0" FontSize="12"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <ProgressBar IsIndeterminate="True" Width="24" Height="24" Margin="10,0,0,0"
+                                         Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                
+                <!-- ============================================ -->
+                <!-- CONTENIDO DE CADA TAB                       -->
+                <!-- ============================================ -->
+                <Grid Grid.Row="1" Background="White">
+                    
+                    <!-- ========== TAB 1: VER MATRIZ ========== -->
+                    <Grid Visibility="{Binding IsChecked, ElementName=TabVerMatriz, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Instrucciones -->
+                        <Border Background="#F0F9FF" Padding="15,10" BorderBrush="#BFDBFE" BorderThickness="0,0,0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="InformationOutline" Foreground="#3B82F6" Width="20" Height="20" VerticalAlignment="Center"/>
+                                <TextBlock Text="Aquí puedes ver todos los riesgos identificados para el centro de trabajo seleccionado. Haz clic en una fila para ver más detalles." 
+                                           Foreground="#1E40AF" FontSize="12" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Filtros y agrupamiento -->
+                        <Border Grid.Row="1" Padding="15,10" Background="#FAFAFA">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Text="{Binding FiltroTexto, UpdateSourceTrigger=PropertyChanged}"
+                                         materialDesign:HintAssist.Hint="🔍 Buscar..."
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         Width="220" Height="38"/>
+                                
+                                <ComboBox ItemsSource="{Binding NivelesRiesgo}" 
+                                          SelectedItem="{Binding FiltroNivelRiesgo}"
+                                          materialDesign:HintAssist.Hint="Filtrar por nivel"
+                                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                          Width="130" Margin="10,0,0,0"/>
+                                
+                                <!-- NUEVO: Selector de Agrupamiento -->
+                                <Border Background="#EEF2FF" CornerRadius="8" Padding="10,5" Margin="20,0,0,0" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Group" Foreground="#6366F1" Width="18" Height="18" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Agrupar por:" Foreground="#4338CA" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,8,0"/>
+                                        <ComboBox ItemsSource="{Binding Agrupamientos}" 
+                                                  SelectedItem="{Binding AgrupamientoSeleccionado}"
+                                                  Style="{StaticResource MaterialDesignComboBox}"
+                                                  MinWidth="110" FontSize="12"
+                                                  Background="Transparent" BorderThickness="0"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Tabla de riesgos con agrupación visual -->
+                        <DataGrid Grid.Row="2" ItemsSource="{Binding MatrizView}" 
+                                  SelectedItem="{Binding ItemSeleccionado}"
+                                  AutoGenerateColumns="False" IsReadOnly="True"
+                                  CanUserAddRows="False" CanUserDeleteRows="False"
+                                  Background="White" BorderThickness="0"
+                                  GridLinesVisibility="Horizontal"
+                                  RowHeight="55"
+                                  VerticalScrollBarVisibility="Auto">
+                            
+                            <!-- NUEVO: Estilo de agrupación visual -->
+                            <DataGrid.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <Expander IsExpanded="True" Background="Transparent" BorderThickness="0">
+                                                            <Expander.Header>
+                                                                <Border Background="#F1F5F9" CornerRadius="6" Padding="12,8" Margin="0,4">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <materialDesign:PackIcon Kind="FolderOutline" Foreground="#6366F1" Width="18" Height="18" VerticalAlignment="Center"/>
+                                                                        <TextBlock Text="{Binding Name, StringFormat='{}{0}'}" 
+                                                                                   FontWeight="SemiBold" Foreground="#1E293B" FontSize="13" 
+                                                                                   Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                                                        <Border Background="#6366F1" CornerRadius="10" Padding="8,2" Margin="12,0,0,0">
+                                                                            <TextBlock Text="{Binding ItemCount}" 
+                                                                                       FontWeight="Bold" Foreground="White" FontSize="11"/>
+                                                                        </Border>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </Expander.Header>
+                                                            <ItemsPresenter Margin="20,0,0,0"/>
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </DataGrid.GroupStyle>
+                            
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="TAREA" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Padding="15,0" VerticalAlignment="Center" TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding Tarea.Nombre}"/>
+                                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        <Setter Property="Foreground" Value="#0F172A"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Tarea}" Value="{x:Null}">
+                                                                <Setter Property="Text" Value="⚡ Generado por IA"/>
+                                                                <Setter Property="Foreground" Value="#8B5CF6"/>
+                                                                <Setter Property="FontStyle" Value="Italic"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTemplateColumn Header="PELIGRO" Width="1.2*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Peligro.Descripcion}" 
+                                                       ToolTip="{Binding Peligro.Descripcion}"
+                                                       Foreground="#475569" VerticalAlignment="Center"
+                                                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                                       MaxHeight="50" Padding="5,0"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTemplateColumn Header="MEDIDA DE CONTROL" Width="1.5*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding MedidaControlEspecifica}" 
+                                                       ToolTip="{Binding MedidaControlEspecifica}"
+                                                       Foreground="#64748B" VerticalAlignment="Center"
+                                                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                                       MaxHeight="50" Padding="5,0"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTemplateColumn Header="NIVEL" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border CornerRadius="15" Padding="12,6" HorizontalAlignment="Center"
+                                                    Background="{Binding NivelRiesgo, Converter={StaticResource NivelRiesgoToColorConverter}}">
+                                                <TextBlock Text="{Binding NivelRiesgo}" FontWeight="Bold" FontSize="11" Foreground="White" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTemplateColumn Header="" Width="80">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DataContext.EliminarItemCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                    CommandParameter="{Binding}"
+                                                    ToolTip="Eliminar este riesgo"
+                                                    Background="#FEE2E2" 
+                                                    BorderBrush="#FECACA"
+                                                    BorderThickness="1"
+                                                    Padding="8,4"
+                                                    Height="34" Width="60"
+                                                    Cursor="Hand">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                                        <Setter Property="Foreground" Value="#DC2626"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#FCA5A5"/>
+                                                                <Setter Property="Foreground" Value="#991B1B"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="Delete" Width="16" Height="16" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    
+                    <!-- ========== TAB 2: AGREGAR RIESGO ========== -->
+                    <ScrollViewer Visibility="{Binding IsChecked, ElementName=TabAgregar, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="30,20,30,30" MaxWidth="800" HorizontalAlignment="Left">
+                            
+                            <!-- Instrucciones principales -->
+                            <Border Background="#F0FDF4" CornerRadius="12" Padding="20" Margin="0,0,0,25">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <materialDesign:PackIcon Kind="LightbulbOutline" Foreground="#059669" Width="24" Height="24"/>
+                                        <TextBlock Text="¿Cómo agregar un riesgo?" FontWeight="Bold" Foreground="#059669" FontSize="16" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock TextWrapping="Wrap" Foreground="#166534" FontSize="13" LineHeight="20">
+                                        Sigue los 4 pasos de abajo para identificar un riesgo.&#x0a;
+                                        Un riesgo se compone de: una TAREA (qué se hace), un PELIGRO (qué puede causar daño), 
+                                        la PROBABILIDAD de que ocurra, y las MEDIDAS DE CONTROL para prevenirlo.
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- PASO 1 -->
+                            <Border Background="#FEF3C7" CornerRadius="12" Padding="20" Margin="0,0,0,15">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#D97706" CornerRadius="15" Width="30" Height="30">
+                                            <TextBlock Text="1" FontWeight="Bold" Foreground="White" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="¿Qué tarea se realiza?" FontWeight="Bold" Foreground="#92400E" FontSize="14" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Selecciona el rubro, la actividad y la tarea específica donde identificaste el riesgo:" 
+                                               Foreground="#78350F" FontSize="12" Margin="0,0,0,12"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="10"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ComboBox ItemsSource="{Binding Rubros}" SelectedItem="{Binding RubroForm}" DisplayMemberPath="Nombre"
+                                                  materialDesign:HintAssist.Hint="Rubro (ej: Construcción)" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                                        <ComboBox Grid.Column="2" ItemsSource="{Binding Actividades}" SelectedItem="{Binding ActividadForm}" DisplayMemberPath="Nombre"
+                                                  materialDesign:HintAssist.Hint="Actividad (ej: Excavación)" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                                        <ComboBox Grid.Column="4" ItemsSource="{Binding Tareas}" SelectedItem="{Binding ItemSeleccionado.Tarea}" DisplayMemberPath="Nombre"
+                                                  materialDesign:HintAssist.Hint="Tarea específica" Style="{StaticResource MaterialDesignOutlinedComboBox}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- PASO 2 -->
+                            <Border Background="#FEE2E2" CornerRadius="12" Padding="20" Margin="0,0,0,15">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#DC2626" CornerRadius="15" Width="30" Height="30">
+                                            <TextBlock Text="2" FontWeight="Bold" Foreground="White" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="¿Cuál es el peligro?" FontWeight="Bold" Foreground="#991B1B" FontSize="14" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Un peligro es algo que puede causar daño (ej: ruido excesivo, caída de altura, sustancias químicas):" 
+                                               Foreground="#7F1D1D" FontSize="12" Margin="0,0,0,12"/>
+                                    <ComboBox ItemsSource="{Binding Peligros}" SelectedItem="{Binding ItemSeleccionado.Peligro}"
+                                              materialDesign:HintAssist.Hint="Selecciona el tipo de peligro" 
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Descripcion}" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding CodigoSuseso, StringFormat='Código SUSESO: {0}'}" FontSize="10" Foreground="#64748B"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- PASO 3 -->
+                            <Border Background="#EEF2FF" CornerRadius="12" Padding="20" Margin="0,0,0,15">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#6366F1" CornerRadius="15" Width="30" Height="30">
+                                            <TextBlock Text="3" FontWeight="Bold" Foreground="White" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="¿Qué tan grave es?" FontWeight="Bold" Foreground="#4338CA" FontSize="14" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Evalúa qué tan probable es que ocurra y qué tan grave sería si pasa:" 
+                                               Foreground="#3730A3" FontSize="12" Margin="0,0,0,12"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="PROBABILIDAD" FontSize="10" FontWeight="Bold" Foreground="#6366F1" Margin="0,0,0,5"/>
+                                            <TextBlock Text="1=Improbable, 2=Posible, 3=Probable, 4=Muy probable, 5=Casi seguro" FontSize="10" Foreground="#64748B" Margin="0,0,0,8"/>
+                                            <TextBox Text="{Binding ItemSeleccionado.Probabilidad}" 
+                                                     materialDesign:HintAssist.Hint="Ingresa 1 a 5" 
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="CONSECUENCIA" FontSize="10" FontWeight="Bold" Foreground="#6366F1" Margin="0,0,0,5"/>
+                                            <TextBlock Text="1=Leve, 2=Menor, 3=Moderado, 4=Mayor, 5=Catastrófico" FontSize="10" Foreground="#64748B" Margin="0,0,0,8"/>
+                                            <TextBox Text="{Binding ItemSeleccionado.Consecuencia}" 
+                                                     materialDesign:HintAssist.Hint="Ingresa 1 a 5" 
+                                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- PASO 4 -->
+                            <Border Background="#F0FDF4" CornerRadius="12" Padding="20" Margin="0,0,0,25">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#10B981" CornerRadius="15" Width="30" Height="30">
+                                            <TextBlock Text="4" FontWeight="Bold" Foreground="White" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <TextBlock Text="¿Cómo lo controlamos?" FontWeight="Bold" Foreground="#065F46" FontSize="14" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Describe las medidas de control que se aplicarán para prevenir o reducir el riesgo:" 
+                                               Foreground="#064E3B" FontSize="12" Margin="0,0,0,12"/>
+                                    <ComboBox ItemsSource="{Binding Controles}" SelectedItem="{Binding ItemSeleccionado.Control}" DisplayMemberPath="Descripcion"
+                                              materialDesign:HintAssist.Hint="Tipo de control (ej: EPP, Capacitación)" 
+                                              Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="0,0,0,12"/>
+                                    <TextBox Text="{Binding ItemSeleccionado.MedidaControlEspecifica}"
+                                             materialDesign:HintAssist.Hint="Describe la medida específica (ej: Uso obligatorio de casco clase B)"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             TextWrapping="Wrap" Height="70" AcceptsReturn="True"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Botones -->
+                            <StackPanel Orientation="Horizontal">
+                                <Button Command="{Binding GuardarItemCommand}" Height="50" Width="200">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="ContentSave" Width="20" Height="20" Foreground="White"/>
+                                        <TextBlock Text="GUARDAR RIESGO" Margin="10,0,0,0" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Command="{Binding NuevoItemCommand}" Style="{StaticResource BotonSecundario}" Height="50" Margin="15,0,0,0"
+                                        ToolTip="Limpia el formulario para empezar de nuevo">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="Refresh" Width="18" Height="18"/>
+                                        <TextBlock Text="Limpiar" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                    
+                    <!-- ========== TAB 3: ASISTENTE IA ========== -->
+                    <ScrollViewer Visibility="{Binding IsChecked, ElementName=TabIA, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="30,20,30,30" MaxWidth="900">
+                            
+                            <!-- Instrucciones principales -->
+                            <Border Background="#FDF4FF" CornerRadius="12" Padding="20" Margin="0,0,0,25">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <materialDesign:PackIcon Kind="RobotHappy" Foreground="#A855F7" Width="28" Height="28"/>
+                                        <TextBlock Text="Asistente de Inteligencia Artificial" FontWeight="Bold" Foreground="#7E22CE" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock TextWrapping="Wrap" Foreground="#6B21A8" FontSize="13" LineHeight="20">
+                                        La IA puede ayudarte a identificar riesgos automáticamente basándose en el rubro de tu empresa.&#x0a;
+                                        Elige una de las opciones de abajo. Los riesgos generados se agregarán a tu matriz automáticamente.
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- OPCIÓN 1: Por Rubro (RECOMENDADA) -->
+                                <Border Background="#F0FDF4" CornerRadius="16" Padding="25" BorderBrush="#86EFAC" BorderThickness="2">
+                                    <StackPanel>
+                                        <Border Background="#10B981" CornerRadius="8" Padding="8,4" HorizontalAlignment="Left" Margin="0,0,0,15">
+                                            <TextBlock Text="⭐ RECOMENDADO" FontWeight="Bold" Foreground="White" FontSize="10"/>
+                                        </Border>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                            <materialDesign:PackIcon Kind="Factory" Foreground="#059669" Width="32" Height="32"/>
+                                            <TextBlock Text="Generar por Rubro" FontWeight="Bold" Foreground="#065F46" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        
+                                        <TextBlock TextWrapping="Wrap" Foreground="#166534" FontSize="13" Margin="0,0,0,20" LineHeight="20">
+                                            La IA realizará un análisis COMPLETO de tu rubro y generará 
+                                            una matriz de 25-35 riesgos cubriendo TODAS las categorías:
+                                            mecánicos, ergonómicos, químicos, físicos, eléctricos, psicosociales y biológicos.
+                                        </TextBlock>
+                                        
+                                        <Border Background="#DCFCE7" CornerRadius="8" Padding="12" Margin="0,0,0,20">
+                                            <StackPanel>
+                                                <TextBlock Text="📍 Rubros de tu empresa:" FontSize="11" Foreground="#166534" FontWeight="SemiBold"/>
+                                                <ItemsControl ItemsSource="{Binding EmpresaSeleccionada.Rubros}" Margin="0,4,0,0">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                                                <TextBlock Text="✓" Foreground="#059669" FontWeight="Bold" Margin="0,0,5,0"/>
+                                                                <TextBlock Text="{Binding Nombre}" FontSize="13" Foreground="#059669" FontWeight="Bold"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Border>
+                                        
+                                        <Button Command="{Binding SugerirRiesgosPorRubroIACommand}" 
+                                                Background="#059669" BorderBrush="#059669" Height="45"
+                                                HorizontalAlignment="Stretch">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="AutoFix" Foreground="White" Width="20" Height="20"/>
+                                                <TextBlock Text="Generar Riesgos con IA" Foreground="White" Margin="10,0,0,0" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- OPCIÓN 2: Importar del catálogo -->
+                                <Border Grid.Column="2" Background="#FEF3C7" CornerRadius="16" Padding="25" BorderBrush="#FCD34D" BorderThickness="1">
+                                    <StackPanel>
+                                        <Border Background="#D97706" CornerRadius="8" Padding="8,4" HorizontalAlignment="Left" Margin="0,0,0,15">
+                                            <TextBlock Text="📚 CATÁLOGO" FontWeight="Bold" Foreground="White" FontSize="10"/>
+                                        </Border>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                            <materialDesign:PackIcon Kind="BookOpenVariant" Foreground="#D97706" Width="32" Height="32"/>
+                                            <TextBlock Text="Importar del Catálogo" FontWeight="Bold" Foreground="#92400E" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        
+                                        <TextBlock TextWrapping="Wrap" Foreground="#78350F" FontSize="13" Margin="0,0,0,20" LineHeight="20">
+                                            Importa riesgos predefinidos de nuestro catálogo estándar, basados en el rubro de tu empresa. 
+                                            Estos son riesgos típicos que ya están documentados.
+                                        </TextBlock>
+                                        
+                                        <Border Background="#FEF9C3" CornerRadius="8" Padding="12" Margin="0,0,0,20">
+                                            <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#854D0E">
+                                                💡 Tip: Usa esta opción si prefieres riesgos estándar ya validados en lugar de generados por IA.
+                                            </TextBlock>
+                                        </Border>
+                                        
+                                        <Button Command="{Binding ImportarRiesgosRubroCommand}" 
+                                                Background="#D97706" BorderBrush="#D97706" Height="45"
+                                                HorizontalAlignment="Stretch">
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Download" Foreground="White" Width="20" Height="20"/>
+                                                <TextBlock Text="Importar del Catálogo" Foreground="White" Margin="10,0,0,0" FontWeight="SemiBold"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                            
+                            <!-- Nota al pie -->
+                            <Border Background="#F1F5F9" CornerRadius="8" Padding="15" Margin="0,25,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="InformationOutline" Foreground="#64748B" Width="18" Height="18" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                                    <TextBlock TextWrapping="Wrap" Foreground="#475569" FontSize="12" Margin="10,0,0,0" LineHeight="18">
+                                        Los riesgos generados se agregarán automáticamente a tu matriz. Puedes editarlos o eliminarlos 
+                                        desde la pestaña "Ver Riesgos". Recuerda revisar cada riesgo para asegurarte de que aplica a tu situación específica.
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

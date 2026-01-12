@@ -1,0 +1,25 @@
+PROTOCOLOS MINSAL OBLIGATORIOS (VIGENCIA 2024-2025)
+
+1. TMERT (TRASTORNOS MUSCULOESQUELÉTICOS)
+- Norma Técnica: Resolución Exenta N° 1660 (2023) / D.S. 594.
+- Obligación: Identificar y evaluar factores de riesgo biomecánico (repetitividad, fuerza, postura).
+- Actualización 2024: Enfoque integral de cuerpo completo (no solo extremidades superiores).
+
+2. PREXOR (RUIDO OCUPACIONAL)
+- Norma Técnica: N° 125 / D.S. 594.
+- Obligación: Programa de Vigilancia Ambiental y de la Salud para trabajadores expuestos a ruido.
+- Objetivo: Prevenir hipoacusia neurosensorial.
+
+3. RADIACIÓN UV (ORIGEN SOLAR)
+- Norma Técnica: Guía Técnica Radiación UV / Ley 20.096.
+- Obligación:
+  a) Publicar diariamente el Índice UV en lugar visible.
+  b) Proveer EPP (gorro legionario, lentes UV, bloqueador solar).
+  c) Indicar medidas de ingeniería (sombreado).
+  d) Especial énfasis en trabajadores al aire libre.
+
+4. RIESGOS PSICOSOCIALES (ISTAS21 / CEAL-SM)
+- Norma Técnica: Protocolo de Vigilancia de Riesgos Psicosociales (Actualización 2023).
+- Instrumento: Cuestionario CEAL-SM / SUSESO (Reemplaza al antiguo ISTAS21 completo).
+- Obligación: Evaluar riesgo psicosocial cada 2 años (o según resultado).
+- Vinculación: Relacionado estrechamente con Ley Karin (Acoso/Violencia).

@@ -1,0 +1,482 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="FluentBackground" Color="#F4F6FB"/>
+        <SolidColorBrush x:Key="FluentCardBackground" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="FluentCardBorder" Color="#E5E7EB"/>
+        <LinearGradientBrush x:Key="FluentHeroBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0F172A" Offset="0"/>
+            <GradientStop Color="#111827" Offset="1"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="FluentHero" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource FluentHeroBackground}"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+
+        <Style x:Key="FluentCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource FluentCardBackground}"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="BorderBrush" Value="{StaticResource FluentCardBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#0F172A" BlurRadius="18" ShadowDepth="4" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource FluentBackground}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                
+                <!-- HERO SECTION (Gradient Header) -->
+                <Border Style="{StaticResource FluentHero}" Height="200">
+                    <Grid Margin="40,30,40,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Título y Selector en la misma fila -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Text="Dashboard General" FontSize="32" FontWeight="Bold" Foreground="White" FontFamily="{StaticResource FontTitulos}"/>
+                            
+                            <!-- SELECTOR DE EMPRESA (reposicionado) -->
+                            <Border Grid.Column="1" Background="#26FFFFFF" CornerRadius="8" Padding="12,8" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Domain" Foreground="White" Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <ComboBox 
+                                        ItemsSource="{Binding Empresas}"
+                                        SelectedItem="{Binding EmpresaSeleccionada, Mode=TwoWay}"
+                                        DisplayMemberPath="RazonSocial"
+                                        MinWidth="280"
+                                        FontSize="13"
+                                        Foreground="White"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                        materialDesign:HintAssist.Foreground="White"
+                                        materialDesign:HintAssist.Hint="Seleccionar empresa"
+                                        Style="{StaticResource MaterialDesignFilledComboBox}">
+                                        <ComboBox.Resources>
+                                            <SolidColorBrush x:Key="MaterialDesignPaper" Color="Transparent"/>
+                                        </ComboBox.Resources>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        
+                        <TextBlock Grid.Row="1" Text="Visión global del cumplimiento normativo y gestión SST." FontSize="16" Foreground="#94A3B8" Margin="0,8,0,0"/>
+                        
+                        <materialDesign:PackIcon Grid.Row="2" Kind="ChartBox" Width="120" Height="120" Foreground="White" Opacity="0.05" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-20,0"/>
+                    </Grid>
+                </Border>
+
+                <!-- CONTENIDO PRINCIPAL (Overlapping Hero) -->
+                <StackPanel Margin="40,-60,40,40">
+                    
+                    <!-- KPI CARDS (Responsive WrapPanel) -->
+                    <WrapPanel Margin="0,0,0,30">
+                        <!-- Card 1: Cumplimiento -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="{StaticResource BrushFondo}" CornerRadius="8" Padding="8">
+                                            <materialDesign:PackIcon Kind="ClipboardCheck" Foreground="{StaticResource BrushSecundario}" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Cumplimiento" Foreground="#64748B" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Indicadores.PorcentajeCumplimiento}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource BrushPrimario}"/>
+                                    <TextBlock Text="Global Empresa" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 2: Pendientes -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#FFFBEB" CornerRadius="8" Padding="8"> <!-- Amber 50 -->
+                                            <materialDesign:PackIcon Kind="AlertCircle" Foreground="{StaticResource BrushWarning}" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Pendientes" Foreground="#64748B" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Indicadores.ObligacionesPendientes}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource BrushPrimario}"/>
+                                    <TextBlock Text="Acciones requeridas" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 3: Siniestros -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#FEF2F2" CornerRadius="8" Padding="8"> <!-- Red 50 -->
+                                            <materialDesign:PackIcon Kind="MedicalBag" Foreground="{StaticResource BrushAlerta}" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Siniestros" Foreground="#64748B" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Indicadores.SiniestrosPeriodo}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource BrushPrimario}"/>
+                                    <TextBlock Text="Últimos 6 meses" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 4: Documentos -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#EEF2FF" CornerRadius="8" Padding="8"> <!-- Indigo 50 -->
+                                            <materialDesign:PackIcon Kind="FileDocument" Foreground="{StaticResource BrushAcento}" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Documentos" Foreground="#64748B" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding DocumentosEsteMes}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource BrushPrimario}"/>
+                                    <TextBlock Text="Generados este mes" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 5: Vigilancia Activa -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#F3E8FF" CornerRadius="8" Padding="8"> <!-- Purple 50 -->
+                                            <materialDesign:PackIcon Kind="EyeCheck" Foreground="#9333EA" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Vigilancia" Foreground="#64748B" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding Indicadores.VigilanciaActiva}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource BrushPrimario}"/>
+                                    <TextBlock Text="Trabajadores en protocolo" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 6: VENCIDAS (NUEVO) -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#FEE2E2" CornerRadius="8" Padding="8"> <!-- Red 100 -->
+                                            <materialDesign:PackIcon Kind="AlertOctagon" Foreground="#DC2626" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Vencidas" Foreground="#DC2626" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ObligacionesVencidas}" FontSize="32" FontWeight="Bold" Foreground="#DC2626"/>
+                                    <TextBlock Text="Obligaciones vencidas" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 7: PRÓXIMOS 30 DÍAS (NUEVO) -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#FEF3C7" CornerRadius="8" Padding="8"> <!-- Amber 100 -->
+                                            <materialDesign:PackIcon Kind="CalendarClock" Foreground="#D97706" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Próximos 30 días" Foreground="#D97706" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding ProximosVencimientos30Dias}" FontSize="32" FontWeight="Bold" Foreground="#D97706"/>
+                                    <TextBlock Text="Vencimientos cercanos" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Card 8: TRABAJADORES SIN DOCUMENTACIÓN (NUEVO) -->
+                        <Border Style="{StaticResource FluentCard}" Margin="0,0,20,20" Padding="20" Width="220">
+                            <Grid>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                        <Border Background="#FEFCE8" CornerRadius="8" Padding="8"> <!-- Yellow 50 -->
+                                            <materialDesign:PackIcon Kind="AccountAlert" Foreground="#CA8A04" Style="{StaticResource PackIconMedium}"/>
+                                        </Border>
+                                        <TextBlock Text="Sin Documentación" Foreground="#CA8A04" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding TrabajadoresSinDocumentacion}" FontSize="32" FontWeight="Bold" Foreground="#CA8A04"/>
+                                        <TextBlock Text="{Binding TotalTrabajadores, StringFormat='/{0}'}" FontSize="16" FontWeight="Normal" Foreground="#94A3B8" VerticalAlignment="Bottom" Margin="2,0,0,5"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Trabajadores incompletos" FontSize="12" Foreground="#64748B" Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </WrapPanel>
+
+                    <!-- GRÁFICOS + WIDGETS -->
+                    <Grid Margin="0,0,0,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- LEFT: Charts (stacked) -->
+                        <StackPanel Grid.Column="0">
+                            <Border Style="{StaticResource FluentCard}" Padding="25" Margin="0,0,0,18">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Distribución de Cumplimiento" FontSize="18" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,20"/>
+                                <lvc:PieChart Series="{Binding CumplimientoSeries}" Height="250" LegendPosition="Right" Grid.Row="1"/>
+                            </Grid>
+                            </Border>
+
+                            <!-- Chart 2 -->
+                            <Border Style="{StaticResource FluentCard}" Padding="25">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Tendencia de Siniestralidad" FontSize="18" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,20"/>
+                                <lvc:CartesianChart Series="{Binding SiniestralidadSeries}" XAxes="{Binding XAxes}" Height="250" Grid.Row="1"/>
+                            </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- RIGHT: Widgets -->
+                        <StackPanel Grid.Column="2" VerticalAlignment="Top">
+                            
+                            <!-- WIDGET: Alertas de Vencimiento (NUEVO - Premium Design) -->
+                            <Border Style="{StaticResource FluentCard}" Padding="0" Margin="0,0,0,18">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <!-- Header con gradiente -->
+                                    <Border CornerRadius="8,8,0,0" Padding="18,15">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#DC2626" Offset="0"/>
+                                                <GradientStop Color="#F59E0B" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="BellAlert" Foreground="White" Width="24" Height="24" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Alertas de Vencimiento" FontWeight="Bold" FontSize="15" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Lista de alertas -->
+                                    <ItemsControl Grid.Row="1" ItemsSource="{Binding AlertasVencimiento}" Margin="12" MaxHeight="280">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="0,0,0,8" CornerRadius="8" Padding="12" BorderThickness="1">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#FAFAFA"/>
+                                                            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding EsVencida}" Value="True">
+                                                                    <Setter Property="Background" Value="#FEF2F2"/>
+                                                                    <Setter Property="BorderBrush" Value="#FECACA"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding EsUrgente}" Value="True">
+                                                                    <Setter Property="Background" Value="#FFFBEB"/>
+                                                                    <Setter Property="BorderBrush" Value="#FDE68A"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding ObligacionCodigo}" FontWeight="Bold" FontSize="13" Foreground="#374151"/>
+                                                            <TextBlock Text="{Binding Descripcion}" FontSize="11" Foreground="#6B7280" TextWrapping="Wrap" MaxWidth="200"/>
+                                                            <TextBlock Text="{Binding FechaVencimiento, StringFormat='Vence: {0:dd/MM/yyyy}'}" FontSize="10" Foreground="#9CA3AF" Margin="0,4,0,0"/>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="1" CornerRadius="12" Padding="10,4" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="Background" Value="#10B981"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding EsVencida}" Value="True">
+                                                                            <Setter Property="Background" Value="#DC2626"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding EsUrgente}" Value="True">
+                                                                            <Setter Property="Background" Value="#F59E0B"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <TextBlock Text="{Binding EstadoTexto}" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Border>
+
+                            <!-- WIDGET: Top 5 Riesgos Críticos -->
+                            <Border Style="{StaticResource FluentCard}" Padding="0" Margin="0,0,0,18">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <!-- Header con gradiente rojo -->
+                                    <Border CornerRadius="8,8,0,0" Padding="18,12">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#B91C1C" Offset="0"/>
+                                                <GradientStop Color="#DC2626" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="AlertCircle" Foreground="White" Width="22" Height="22" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Top 5 Riesgos Críticos" FontWeight="Bold" FontSize="14" Foreground="White" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <ItemsControl Grid.Row="1" ItemsSource="{Binding RiesgosCriticos}" Margin="12" MaxHeight="320">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#FAFAFA" CornerRadius="8" Padding="12" Margin="0,0,0,8" BorderBrush="#F1F5F9" BorderThickness="1">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Peligro.Descripcion}" FontWeight="SemiBold" Foreground="#1E293B" FontSize="12" TextWrapping="Wrap" MaxWidth="180"/>
+                                                            <TextBlock FontSize="11" Foreground="#64748B" Margin="0,4,0,0">
+                                                                <TextBlock.Style>
+                                                                    <Style TargetType="TextBlock">
+                                                                        <Setter Property="Text" Value="{Binding Tarea.Nombre}"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding Tarea}" Value="{x:Null}">
+                                                                                <Setter Property="Text" Value="⚡ Generado por IA"/>
+                                                                                <Setter Property="Foreground" Value="#8B5CF6"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </TextBlock.Style>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                            <Border CornerRadius="12" Padding="10,4" HorizontalAlignment="Center"
+                                                                    Background="{Binding NivelRiesgo, Converter={StaticResource NivelRiesgoToColorConverter}}">
+                                                                <TextBlock Text="{Binding NivelRiesgo}" FontWeight="Bold" FontSize="10" Foreground="White"/>
+                                                            </Border>
+                                                            <TextBlock HorizontalAlignment="Center" FontSize="10" Foreground="#94A3B8" Margin="0,4,0,0">
+                                                                <Run Text="P"/>
+                                                                <Run Text="{Binding Probabilidad, Mode=OneWay}"/>
+                                                                <Run Text="×C"/>
+                                                                <Run Text="{Binding Consecuencia, Mode=OneWay}"/>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Border>
+
+                            <!-- WIDGET: Documentos Recientes -->
+                            <Border Style="{StaticResource FluentCard}" Padding="18">
+                                <StackPanel>
+                                    <TextBlock Text="📄 Documentos Recientes" FontWeight="Bold" FontSize="16" Foreground="#0F172A"/>
+                                    <ItemsControl ItemsSource="{Binding DocumentosRecientes}" Margin="0,12,0,0">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="0,6,0,6">
+                                                    <materialDesign:PackIcon Kind="FileDocument" Style="{StaticResource PackIconMedium}" Foreground="#6366F1"/>
+                                                    <StackPanel Margin="8,0,0,0">
+                                                        <TextBlock Text="{Binding PlantillaNombre}" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                                        <TextBlock Text="{Binding Fecha, StringFormat=d}" FontSize="12" Foreground="#64748B"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- TABLA OBLIGACIONES -->
+                    <Border Style="{StaticResource FluentCard}" Padding="0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Border BorderBrush="#F1F5F9" BorderThickness="0,0,0,1" Padding="25">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ClockAlertOutline" Style="{StaticResource PackIconMedium}" Foreground="#F59E0B" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Próximos Vencimientos" FontSize="18" FontWeight="Bold" Foreground="#0F172A" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <DataGrid Grid.Row="1" ItemsSource="{Binding Obligaciones}" AutoGenerateColumns="False" IsReadOnly="True" Height="250" 
+                                      VerticalScrollBarVisibility="Auto" HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                      Background="White" BorderThickness="0" Margin="10">
+                                <DataGrid.Resources>
+                                    <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="Foreground" Value="#64748B"/>
+                                        <Setter Property="FontSize" Value="13"/>
+                                        <Setter Property="Padding" Value="20,15"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Style>
+                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}">
+                                        <Setter Property="Padding" Value="20,15"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Foreground" Value="#334155"/>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="CÓDIGO" Binding="{Binding Obligacion.Codigo}" FontWeight="Bold" Foreground="#64748B"/>
+                                    <DataGridTextColumn Header="DESCRIPCIÓN" Binding="{Binding Obligacion.Descripcion}" Width="*" />
+                                    <DataGridTextColumn Header="VENCE" Binding="{Binding FechaLimite, StringFormat=d}" />
+                                    <DataGridTemplateColumn Header="ESTADO">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{Binding Estado, Converter={StaticResource EstadoToColorConverter}}" CornerRadius="6" Padding="10,4" HorizontalAlignment="Left">
+                                                    <TextBlock Text="{Binding Estado}" Foreground="White" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

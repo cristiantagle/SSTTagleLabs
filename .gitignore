@@ -1,0 +1,38 @@
+# Dependencias y compilacion
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+Dist/
+Publish/
+
+# Base de datos local (Importante: NO borrar del disco, solo ignorar en git)
+TagleLabs.db
+TagleLabs.db-shm
+TagleLabs.db-wal
+TagleLabs.db.bak
+
+# Archivos de la IA y Diccionarios
+KnowledgeInput_md/
+TestAI/
+Outputs/
+
+# Claves y Secretos
+*.key
+*.pem
+appsettings.Development.json
+gemini.key
+
+# Otro repositorio (AsistenciaPro tiene su propio git)
+AsistenciaPro/
+
+# Archivos temporales
+*.tmp
+*.log
+Thumbs.db
+
+# Configuración del Agente
+.agent/
+.config/

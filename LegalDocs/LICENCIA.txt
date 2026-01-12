@@ -1,0 +1,49 @@
+LICENCIA DE USO - TAGLELABS GESTOR SST
+======================================
+
+Copyright (c) 2025 TagleLabs
+
+TÉRMINOS Y CONDICIONES DE USO
+
+1. ACEPTACIÓN
+Al instalar y utilizar este software, usted acepta los términos 
+y condiciones establecidos en esta licencia.
+
+2. LICENCIA DE USO
+TagleLabs le otorga una licencia no exclusiva, no transferible,
+para utilizar este software en su organización.
+
+3. RESTRICCIONES
+- No puede distribuir, vender, alquilar o sublicenciar el software.
+- No puede realizar ingeniería inversa, descompilar o desensamblar.
+- No puede modificar, adaptar o crear obras derivadas.
+
+4. PROPIEDAD INTELECTUAL
+Este software y su documentación son propiedad de TagleLabs.
+Todos los derechos no expresamente otorgados están reservados.
+
+5. GARANTÍA LIMITADA
+Este software se proporciona "tal cual", sin garantías de ningún tipo,
+expresas o implícitas.
+
+6. LIMITACIÓN DE RESPONSABILIDAD
+TagleLabs no será responsable por daños directos, indirectos,
+incidentales, especiales o consecuentes derivados del uso de este software.
+
+7. CUMPLIMIENTO NORMATIVO
+Este software está diseñado para facilitar el cumplimiento de:
+- Decreto Supremo 44 (DS44)
+- Ley 21.643 (Ley Karin)
+- Normativa chilena de Seguridad y Salud en el Trabajo
+
+El usuario es responsable de verificar que los documentos y procesos
+generados cumplan con la legislación vigente.
+
+8. SOPORTE
+Para soporte técnico, contacte a: soporte@taglelabs.cl
+
+9. LEY APLICABLE
+Esta licencia se rige por las leyes de la República de Chile.
+
+======================================
+TagleLabs © 2025 - Todos los derechos reservados

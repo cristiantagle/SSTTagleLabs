@@ -1,0 +1,255 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.EmpresasView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <Style x:Key="EstiloItemLista" TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="8" Margin="0,4">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F8FAFC"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#10B981"/>
+                                <Setter TargetName="Border" Property="BorderThickness" Value="3,0,0,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F1F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER GRADIENTE -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Grid.RowSpan="2"/>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1" Margin="30,-80,30,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- COLUMNA IZQUIERDA: LISTA -->
+            <Grid Grid.Column="0" Margin="0,0,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Empresas" Style="{StaticResource EstiloTituloPagina}" Margin="0,0,0,5"/>
+                <TextBlock Grid.Row="1" Text="Administre sus clientes" Style="{StaticResource EstiloSubtituloPagina}" Margin="0,0,0,20"/>
+
+                <Border Grid.Row="2" Style="{StaticResource EstiloCardContenido}" Padding="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Botón Nueva -->
+                        <Button Command="{Binding NuevaEmpresaCommand}" Style="{StaticResource MaterialDesignFlatButton}" 
+                                Height="60" Background="Transparent" BorderThickness="0,0,0,1" BorderBrush="#F1F5F9"
+                                HorizontalContentAlignment="Left" Padding="20,0" ToolTip="Crear nueva empresa">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Background="#ECFDF5" CornerRadius="20" Width="32" Height="32" Margin="0,0,15,0">
+                                    <materialDesign:PackIcon Kind="Plus" Foreground="#10B981" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="Nueva Empresa" FontWeight="SemiBold" Foreground="#10B981" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Lista -->
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Empresas}" SelectedItem="{Binding EmpresaSeleccionada}" 
+                                 Background="Transparent" BorderThickness="0" ItemContainerStyle="{StaticResource EstiloItemLista}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Logo Placeholder Logic -->
+                                        <Grid Width="32" Height="32" Margin="0,0,15,0">
+                                            <Border Background="#F1F5F9" CornerRadius="6" BorderBrush="#E2E8F0" BorderThickness="1">
+                                                <materialDesign:PackIcon Kind="Domain" Foreground="#64748B" Style="{StaticResource PackIconSmall}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Border>
+                                            <Image Source="{Binding LogoPath}" Stretch="UniformToFill">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding LogoPath}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                                <Image.Clip>
+                                                    <RectangleGeometry Rect="0,0,32,32" RadiusX="6" RadiusY="6"/>
+                                                </Image.Clip>
+                                            </Image>
+                                        </Grid>
+
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding RazonSocial}" FontWeight="SemiBold" Foreground="#0F172A" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Rut}" FontSize="12" Foreground="#64748B"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- COLUMNA DERECHA: DETALLE -->
+            <Grid Grid.Column="1">
+                <!-- Mensaje Vacío -->
+                <Border Style="{StaticResource EstiloCardContenido}" VerticalAlignment="Center" 
+                        Visibility="{Binding EmpresaSeleccionada, Converter={StaticResource NullToCollapsedConverter}}">
+                    <StackPanel HorizontalAlignment="Center" Margin="40">
+                        <materialDesign:PackIcon Kind="DomainOff" Style="{StaticResource PackIconLarge}" Foreground="#CBD5E1" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="Seleccione una empresa" FontSize="20" FontWeight="Bold" Foreground="#64748B" HorizontalAlignment="Center"/>
+                        <TextBlock Text="O cree una nueva para comenzar" FontSize="14" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Formulario -->
+                <Border Style="{StaticResource EstiloCardContenido}" Visibility="{Binding EmpresaSeleccionada, Converter={StaticResource NullToVisibilityConverter}}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,30">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding EmpresaSeleccionada.RazonSocial}" FontSize="24" FontWeight="Bold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Información Corporativa" FontSize="14" Foreground="#64748B"/>
+                                </StackPanel>
+                                <Button Command="{Binding EliminarEmpresaCommand}" Style="{StaticResource MaterialDesignIconForegroundButton}" 
+                                        HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#EF4444" ToolTip="Eliminar Empresa">
+                                    <materialDesign:PackIcon Kind="DeleteOutline" Style="{StaticResource PackIconMedium}"/>
+                                </Button>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Campo RUT con validación visual -->
+                                <StackPanel>
+                                    <Grid>
+                                        <TextBox x:Name="TxtRut" 
+                                                 Text="{Binding EmpresaSeleccionada.Rut, UpdateSourceTrigger=PropertyChanged}" 
+                                                 materialDesign:HintAssist.Hint="RUT (ej: 12.345.678-9)" 
+                                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                 TextChanged="TxtRut_TextChanged"/>
+                                        <materialDesign:PackIcon x:Name="IconRutValid" Kind="CheckCircle" 
+                                                                  Foreground="#10B981" Width="22" Height="22"
+                                                                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                                  Margin="0,0,10,0" Visibility="Collapsed"/>
+                                        <materialDesign:PackIcon x:Name="IconRutInvalid" Kind="CloseCircle" 
+                                                                  Foreground="#EF4444" Width="22" Height="22"
+                                                                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                                  Margin="0,0,10,0" Visibility="Collapsed"/>
+                                    </Grid>
+                                    <TextBlock x:Name="TxtRutError" FontSize="11" Foreground="#EF4444" Margin="5,2,0,0" Visibility="Collapsed"/>
+                                </StackPanel>
+                                <TextBox Grid.Column="2" Text="{Binding EmpresaSeleccionada.RazonSocial}" materialDesign:HintAssist.Hint="Razón Social" Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                            </Grid>
+
+                            <!-- SELECCIÓN MÚLTIPLE DE RUBROS PARA MIPER -->
+                            <Border Background="#F0FDF4" CornerRadius="8" Padding="15" Margin="0,0,0,20">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <materialDesign:PackIcon Kind="Briefcase" Foreground="#16A34A" Width="20" Height="20" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Rubros para MIPER" FontWeight="Bold" Foreground="#166534" FontSize="14"/>
+                                        <TextBlock Text="(Seleccione hasta 3)" FontSize="12" Foreground="#64748B" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    
+                                    <ListBox x:Name="RubrosListBox" 
+                                             ItemsSource="{Binding Rubros}" 
+                                             SelectionMode="Multiple"
+                                             MaxHeight="150"
+                                             Background="Transparent"
+                                             BorderThickness="0"
+                                             SelectionChanged="RubrosListBox_SelectionChanged">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="5,3">
+                                                    <materialDesign:PackIcon Kind="CheckboxBlankOutline" x:Name="UncheckedIcon" 
+                                                                              Foreground="#94A3B8" Width="18" Height="18" Margin="0,0,8,0"/>
+                                                    <materialDesign:PackIcon Kind="CheckboxMarked" x:Name="CheckedIcon" 
+                                                                              Foreground="#16A34A" Width="18" Height="18" Margin="0,0,8,0" Visibility="Collapsed"/>
+                                                    <TextBlock Text="{Binding Nombre}" Foreground="#374151" FontSize="13"/>
+                                                </StackPanel>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                                        <Setter TargetName="UncheckedIcon" Property="Visibility" Value="Collapsed"/>
+                                                        <Setter TargetName="CheckedIcon" Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                                                <Setter Property="Padding" Value="5,2"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                    </ListBox>
+                                </StackPanel>
+                            </Border>
+                            
+                            <TextBox Text="{Binding EmpresaSeleccionada.Direccion}" materialDesign:HintAssist.Hint="Dirección Casa Matriz" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,20"/>
+                            <TextBox Text="{Binding EmpresaSeleccionada.EmailContacto}" materialDesign:HintAssist.Hint="Email de Contacto" Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0,0,0,30"/>
+
+                            <Separator Background="#F1F5F9" Margin="0,0,0,30"/>
+
+                            <TextBlock Text="Identidad Visual" FontSize="16" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,15"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
+                                <Border Width="100" Height="100" CornerRadius="10" BorderBrush="#E2E8F0" BorderThickness="1" Background="#F1F5F9" Margin="0,0,20,0">
+                                    <Grid>
+                                        <materialDesign:PackIcon Kind="ImageOutline" Style="{StaticResource PackIconLarge}" Foreground="#CBD5E1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Image Source="{Binding EmpresaSeleccionada.LogoPath}" Stretch="Uniform" Margin="10"/>
+                                    </Grid>
+                                </Border>
+                                <Button Command="{Binding SubirLogoCommand}" Content="SUBIR LOGO" Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <Button Command="{Binding GuardarEmpresaCommand}" Content="GUARDAR CAMBIOS" Height="50" 
+                                    Background="#0F172A" BorderBrush="#0F172A" Foreground="White" FontSize="14" FontWeight="Bold"
+                                    materialDesign:ButtonAssist.CornerRadius="8"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,100 @@
+<UserControl x:Class="TagleLabsGestorSST.UI.Views.AsistenciaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             d:DesignHeight="800" d:DesignWidth="1400"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    
+    <Grid Background="{StaticResource BrushFondo}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Border Style="{StaticResource EstiloHeaderHero}" Height="100">
+            <Grid Margin="40,10,40,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Control de Asistencia" FontSize="24" FontWeight="Bold" Foreground="White" FontFamily="{StaticResource FontTitulos}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Módulo integrado AsistenciaPro" FontSize="12" Foreground="#94A3B8"/>
+                        <TextBlock Text=" • " FontSize="12" Foreground="#64748B"/>
+                        <TextBlock Text="{Binding StatusMessage}" FontSize="12" Foreground="#94A3B8"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding RefreshCommand}"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                            Background="#6366F1" Foreground="White" Padding="15,8"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            ToolTip="Recargar">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Refresh" Width="18" Height="18"/>
+                            <TextBlock Text="RECARGAR" Margin="8,0,0,0" FontWeight="SemiBold" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button Command="{Binding OpenInBrowserCommand}"
+                            Style="{StaticResource MaterialDesignFlatMidBgButton}"
+                            Background="#10B981" Foreground="White" Padding="15,8" Margin="10,0,0,0"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            ToolTip="Abrir en navegador externo">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="OpenInNew" Width="18" Height="18"/>
+                            <TextBlock Text="ABRIR EXTERNO" Margin="8,0,0,0" FontWeight="SemiBold" FontSize="11"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <Grid Grid.Row="1" Margin="20,-10,20,20">
+            <!-- Error State cuando servidor no disponible -->
+            <Border Style="{StaticResource EstiloCardContenido}" 
+                    Visibility="{Binding IsServerAvailable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="500">
+                    <materialDesign:PackIcon Kind="ServerOff" Width="80" Height="80" Foreground="#EF4444" 
+                                              HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="AsistenciaPro No Disponible" FontSize="22" FontWeight="Bold" 
+                               Foreground="#0F172A" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               FontSize="14" Foreground="#64748B" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                    
+                    <Border Background="#FEF3C7" CornerRadius="8" Padding="15" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Para iniciar AsistenciaPro:" FontWeight="Bold" Foreground="#92400E"/>
+                            <TextBlock Foreground="#92400E" Margin="0,5,0,0">
+                                <Run Text="1. Abra una terminal en "/><Run Text="C:\AsistenciaPro" FontFamily="Consolas"/>
+                            </TextBlock>
+                            <TextBlock Foreground="#92400E">
+                                <Run Text="2. Ejecute: "/><Run Text="npm run dev" FontFamily="Consolas" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Text="3. Haga clic en RECARGAR" Foreground="#92400E"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Button Command="{Binding RefreshCommand}" Content="RECARGAR" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#3B82F6" Foreground="White" Margin="0,20,0,0"
+                            HorizontalAlignment="Center" Padding="30,10"/>
+                </StackPanel>
+            </Border>
+
+            <!-- WebView cuando servidor disponible -->
+            <Border Style="{StaticResource EstiloCardContenido}" Padding="0"
+                    Visibility="{Binding IsServerAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <wv2:WebView2 x:Name="WebView" Source="{Binding AsistenciaUrl, TargetNullValue='about:blank', FallbackValue='about:blank'}"/>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

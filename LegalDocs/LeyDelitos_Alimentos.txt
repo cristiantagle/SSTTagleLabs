@@ -1,0 +1,15 @@
+LEYES DE CUMPLIMIENTO Y RESPONSABILIDAD EMPRESARIAL (2024-2025)
+
+1. LEY DE DELITOS ECONÓMICOS (LEY 21.595)
+- RESPONSABILIDAD PENAL PERSONA JURÍDICA: Se amplía el catálogo de delitos (ambientales, informáticos, estafas).
+- OBLIGACIÓN RIOHS:
+  - Si la empresa tiene un Modelo de Prevención de Delitos (MPD), este debe ser ANEXO al contrato y mencionado en el RIOHS.
+  - Se deben explicitar las sanciones internas por incumplimiento del MPD.
+  - Prohibiciones específicas sobre soborno, cohecho, administración desleal y delitos ambientales.
+
+2. LEY DE PAGO DE PENSIONES DE ALIMENTOS (LEY 21.389) - REGISTRO NACIONAL DE DEUDORES
+- OBLIGACIÓN DEL EMPLEADOR:
+  - Retener judicialmente la pensión de alimentos si existe orden judicial.
+  - Responsabilidad solidaria: Si el empleador no retiene, es responsable del pago con su propio patrimonio.
+  - Obligación de declarar la retención en las liquidaciones de sueldo.
+- RIOHS: Se debe mencionar la obligación de la empresa de acatar órdenes judiciales de retención de alimentos.
